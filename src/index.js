@@ -1,8 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { render } from 'react-dom';
+import configureStore from './store/configureStore';
+import { Provider } from 'react-redux';
+import { Router, browserHistory } from 'react-router';
+import routes from './routes';
+import {loadSets} from './actions/podActions';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+const store = configureStore();
+
+store.dispatch(loadSets());
+
+render(
+ <Provider store={store}>
+   <Router history={browserHistory} routes={routes} />
+ </Provider>,
+ document.getElementById('app')
+);
