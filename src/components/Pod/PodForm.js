@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import TextInput from '../common/TextInput';
 import Select from '../common/Select';
 
@@ -36,58 +37,56 @@ class PodForm extends React.Component {
   render() {
     const players = this.makePlayerInputs();
     return (
-      <div>
-        <form>
-          <TextInput
-            name="name"
-            label="Pod Name"
-            value={this.props.pod.name}
-            onChange={this.props.onChange}/>
+      <form>
+        <TextInput
+          name="name"
+          label="Pod Name"
+          value={this.props.pod.name}
+          onChange={this.props.onChange}/>
+
+        <Select
+          name="pack_1_set"
+          label="First Pack Set"
+          value={this.props.pod.pack_1_set}
+          options={this.props.sets.map(function(set) {return {value: set.code, display: set.name, selected: false}} )}
+          onChange={this.props.onChange}
+        />
+
+         <Select
+           name="pack_2_set"
+           label="Second Pack Set"
+           value={this.props.pod.pack_2_set}
+           options={this.props.sets.map(function(set) {return {value: set.code, display: set.name, selected: false}} )}
+           onChange={this.props.onChange}
+         />
 
           <Select
-            name="pack_1_set"
-            label="First Pack Set"
-            value={this.props.pod.pack_1_set}
+            name="pack_3_set"
+            label="Third Pack Set"
+            value={this.props.pod.pack_3_set}
             options={this.props.sets.map(function(set) {return {value: set.code, display: set.name, selected: false}} )}
             onChange={this.props.onChange}
           />
 
-           <Select
-             name="pack_2_set"
-             label="Second Pack Set"
-             value={this.props.pod.pack_2_set}
-             options={this.props.sets.map(function(set) {return {value: set.code, display: set.name, selected: false}} )}
-             onChange={this.props.onChange}
-           />
+        {players}
 
-            <Select
-              name="pack_3_set"
-              label="Third Pack Set"
-              value={this.props.pod.pack_3_set}
-              options={this.props.sets.map(function(set) {return {value: set.code, display: set.name, selected: false}} )}
-              onChange={this.props.onChange}
-            />
-
-          {players}
-
-          <input
-            type="submit"
-            disabled={this.props.saving}
-            className="btn btn-primary"
-            onClick={this.props.onSave}/>
-        </form>
-      </div>
+        <input
+          type="submit"
+          disabled={this.props.saving}
+          className="btn btn-primary"
+          onClick={this.props.onSave}/>
+      </form>
   );
   }
 }
 
 PodForm.propTypes = {
-  pod: React.PropTypes.object.isRequired,
-  sets: React.PropTypes.array.isRequired,
-  onSave: React.PropTypes.func.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  onPlayerChange: React.PropTypes.func.isRequired,
-  saving: React.PropTypes.bool
+  pod: PropTypes.object.isRequired,
+  sets: PropTypes.array.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onPlayerChange: PropTypes.func.isRequired,
+  saving: PropTypes.bool
 };
 
 export default PodForm;

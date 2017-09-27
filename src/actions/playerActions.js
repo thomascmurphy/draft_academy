@@ -10,7 +10,6 @@ export function filterPodsSuccess(pods) {
 }
 
 export function loadPackCardsSuccess(pack_cards) {
-  console.log('filter packcards:', pack_cards);
   return {type: types.LOAD_PACK_CARDS_SUCCESS, pack_cards};
 }
 
@@ -31,7 +30,6 @@ export function loadPlayers(email) {
     return playerApi.getPlayers(email).then(response => {
       dispatch(loadPlayersSuccess(response.players));
       dispatch(filterPodsSuccess(response.pods));
-      console.log('filter pods: ', response.pods)
     }).catch(error => {
       throw(error);
     });
@@ -60,10 +58,9 @@ export function loadDeckCards(hash) {
   };
 }
 
-export function makePick(packCardId) {console.log('start makepick:', packCardId);
+export function makePick(packCardId) {
   return function(dispatch) {
     return playerApi.makePick(packCardId).then(response => {
-      console.log('finish makepick:', response);
       dispatch(loadPackCardsSuccess(response.pack_cards));
       dispatch(loadDeckCardsSuccess(response.deck_cards));
       dispatch(filterPacksSuccess([response.pack]));
@@ -73,7 +70,7 @@ export function makePick(packCardId) {console.log('start makepick:', packCardId)
   };
 }
 
-export function preloadImages(hash) {console.log('preload images');
+export function preloadImages(hash) {
   return function(dispatch) {
     return playerApi.getCardImages(hash).then(response => {
       let images = response.card_image_urls.map((card_image_url) => {

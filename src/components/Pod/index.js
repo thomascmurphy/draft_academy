@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import './style.css';
@@ -53,24 +54,22 @@ class PodPage extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="row">
-          <div className="col-md-6">
-            <h1>Pod: {this.state.pod.name} <small>({this.state.pod.pack_1_set}, {this.state.pod.pack_2_set}, {this.state.pod.pack_3_set})</small></h1>
-          </div>
-          <div className="col-md-6">
-            <h2 className="text-center">Pick #{this.state.pickNumber}</h2>
-            <input type="range" name="pickNumber" onChange={this.changePickNumber} defaultValue={this.state.pickNumber} min="1" max={this.state.pickCount} step="1"/>
-          </div>
+    return ([
+      <div className="row" key="pod_header">
+        <div className="col-md-6">
+          <h1>Pod: {this.state.pod.name} <small>({this.state.pod.pack_1_set}, {this.state.pod.pack_2_set}, {this.state.pod.pack_3_set})</small></h1>
         </div>
-        <div className="row">
-          <div className="col-md-12">
-            <PodPlayerList players={this.state.players} />
-          </div>
+        <div className="col-md-6">
+          <h2 className="text-center">Pick #{this.state.pickNumber}</h2>
+          <input type="range" name="pickNumber" onChange={this.changePickNumber} defaultValue={this.state.pickNumber} min="1" max={this.state.pickCount} step="1"/>
+        </div>
+      </div>,
+      <div className="row" key="pod_content">
+        <div className="col-md-12">
+          <PodPlayerList players={this.state.players} />
         </div>
       </div>
-    );
+    ]);
   }
 }
 

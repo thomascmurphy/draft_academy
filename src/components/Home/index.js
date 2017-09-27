@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router';
@@ -66,48 +67,44 @@ class HomePage extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="page-header">
-          <h1>Draft Academy <small>Draft with friends and learn from their picks</small></h1>
+    return ([
+      <div className="page-header" key="home_header">
+        <h1>Draft Academy <small>Draft with friends and learn from their picks</small></h1>
+      </div>,
+      <div className="row" key="home_content">
+        <div className="col-sm-6">
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              <h3 className="panel-title">Continue Draft</h3>
+            </div>
+            <div className="panel-body">
+              <EmailForm
+                email={this.state.email}
+                onSave={this.filterPlayers}
+                onChange={this.updateEmailState}
+                saving={this.state.saving}/>
+            </div>
+          </div>
         </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Continue Draft</h3>
-              </div>
-              <div className="panel-body">
-                <EmailForm
-                  email={this.state.email}
-                  onSave={this.filterPlayers}
-                  onChange={this.updateEmailState}
-                  saving={this.state.saving}/>
-              </div>
+        <div className="col-sm-6">
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              <h3 className="panel-title">Start New Draft</h3>
+            </div>
+            <div className="panel-body">
+              <PodForm
+                pod={this.state.pod}
+                players={this.state.players}
+                sets={this.props.sets}
+                onSave={this.createPod}
+                onChange={this.updatePodState}
+                onPlayerChange={this.updatePlayerState}
+                saving={this.state.saving}/>
             </div>
           </div>
-
-          <div className="col-sm-6">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Start New Draft</h3>
-              </div>
-              <div className="panel-body">
-                <PodForm
-                  pod={this.state.pod}
-                  players={this.state.players}
-                  sets={this.props.sets}
-                  onSave={this.createPod}
-                  onChange={this.updatePodState}
-                  onPlayerChange={this.updatePlayerState}
-                  saving={this.state.saving}/>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
-    );
+    ]);
   }
 }
 

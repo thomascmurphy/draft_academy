@@ -1,5 +1,6 @@
-import React, {PropTypes} from 'react';
-import DeckCardList from '../pack/DeckCardList';
+import React from 'react';
+import PropTypes from 'prop-types';
+import DeckCardList from '../Pack/DeckCardList';
 
 const PodPlayerList = ({players}) => {
   return (

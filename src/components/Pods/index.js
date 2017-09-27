@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import * as podActions from '../../actions/podActions';
 import PodList from './PodList';
@@ -6,17 +7,21 @@ import PodList from './PodList';
 class PodsPage extends React.Component {
   render() {
     const pods = this.props.pods;
-    return (
-      <div className="row">
-        <h1>Your Pods</h1>
+    let content = <div className="well text-center">You haven't been a part of any pods yet :(</div>
+    if (pods && pods.length) {
+      content = <PodList pods={pods} />
+    }
+    return ([
+      <h1 key="pods_header">Your Pods</h1>,
+      <div className="row" key="pods_content">
         <div className="col-md-6">
-          <PodList pods={pods} />
+          {content}
         </div>
         <div className="col-md-6">
           {this.props.children}
         </div>
       </div>
-    );
+    ]);
   }
 }
 
@@ -33,7 +38,7 @@ function mapStateToProps(state, ownProps) {
     };
   } else {
     return {
-      pods: [{id: '', name: '', packSets: [], playerIds: []}]
+      pods: []
     }
   }
 }
