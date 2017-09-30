@@ -23,7 +23,7 @@ class PodApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }),
-      body: JSON.stringify({pod: pod, player_emails: player_emails}),
+      body: JSON.stringify({pod: pod, players: pod.players}),
       mode: 'cors'
     });
 
