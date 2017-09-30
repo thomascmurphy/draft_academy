@@ -56,15 +56,17 @@ class PackPage extends React.Component {
     const packCards = this.props.packCards;
     const deckCards = this.props.deckCards;
     var pack_title = 'Your Pack';
+    var pick_title = '';
     var pack_card_list = <p>Waiting for your next pack to be passed</p>;
     if (this.props.pack.number > 0) {
-      pack_title = "Pack #" + this.props.pack.number;
+      pack_title = "Pack " + this.props.pack.number;
+      pick_title = <small>(Pick {(deckCards.length + 1)})</small>;
       pack_card_list = <PackCardList packCards={packCards} onClick={this.savePick} />;
     }
     return (
       <div className="row">
         <div className="col-md-6">
-          <h1>{pack_title}</h1>
+          <h1>{pack_title} {pick_title}</h1>
           {pack_card_list}
         </div>
         <div className="col-md-6">
