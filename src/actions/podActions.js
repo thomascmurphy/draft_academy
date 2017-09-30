@@ -45,7 +45,8 @@ export function loadPod(podId) {
 export function createPod(pod) {
   return function(dispatch) {
     return podApi.createPod(pod).then(response => {
-      dispatch(createPodSuccess(response.pods));
+      dispatch(createPodSuccess(response));
+      return response;
     }).catch(error => {
       throw(error);
     });
@@ -55,7 +56,8 @@ export function createPod(pod) {
 export function updatePod(pod) {
   return function (dispatch) {
     return podApi.updatePod(pod).then(response => {
-      dispatch(updatePodSuccess(response.pods));
+      dispatch(updatePodSuccess(response.pod));
+      return response;
     }).catch(error => {
       throw(error);
     });

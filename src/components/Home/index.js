@@ -39,15 +39,20 @@ class HomePage extends React.Component {
   filterPlayers(event) {
     event.preventDefault();
     this.setState({saving: true});
-    this.props.actions.loadPlayers(this.state.email);
-    browserHistory.push('/pods');
+    this.props.actions.loadPlayers(this.state.email).then((response) => {
+      this.setState({saving: false});
+      browserHistory.push('/pods');
+    });
   }
 
   createPod(event) {
     event.preventDefault();
     this.setState({saving: true});
     this.props.actions.createPod(this.state.pod).then((response) => {
-      browserHistory.push('/pods');
+      this.props.actions.loadPlayers(response.owner_email).then((player_response) => {
+        this.setState({saving: false});
+        browserHistory.push('/pods');
+      });
     });
   }
 
