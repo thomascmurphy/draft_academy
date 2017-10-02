@@ -61,7 +61,7 @@ class PackPage extends React.Component {
 
   togglePastPicks() {
     let newShowPastPicks = !this.state.showPastPicks;
-    let packCards = collectPackCards(this.state.allPackCards, this.state.pack, newShowPastPicks);
+    let packCards = collectPackCards(this.state.allPackCards, this.state.deckCards, this.state.pack, newShowPastPicks);
     this.setState({packCards: packCards});
     this.setState({showPastPicks: newShowPastPicks});
   }
@@ -110,9 +110,11 @@ PackPage.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-function collectPackCards(packCards, pack, showPastPicks) {
+function collectPackCards(packCards, deckCards, pack, showPastPicks) {
+  let firstPackPick = deckCards.filter(deckCard => deckCard.pack_id == pack.id).sort((card1, card2) => card1.pick_number - card2.pick_number)[0];
+  let firstPackPickNumber = firstPackPick ? firstPackPick.pick_number : 99;
   let selected = packCards.map(packCard => {
-    if (packCard.pack_id == pack.id && (showPastPicks || !packCard.deck_id)) {
+    if (packCard.pack_id == pack.id && ((showPastPicks && packCard.pick_number >= firstPackPickNumber) || !packCard.deck_id)) {
       return packCard;
     }
   });
@@ -127,7 +129,7 @@ function mapStateToProps(state, ownProps) {
   if (state.packs.length > 0 && state.packCards.length > 0) {
     let packId = state.packCards[0].pack_id;
     pack = Object.assign({}, state.packs.find(pack => pack ? pack.id == packId : false));
-    packCards = collectPackCards(state.packCards, pack, state.showPastPicks);
+    packCards = collectPackCards(state.packCards, deckCards, pack, state.showPastPicks, false);
   }
   return {pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
 }
