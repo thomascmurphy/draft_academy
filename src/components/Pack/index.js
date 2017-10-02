@@ -12,18 +12,22 @@ class PackPage extends React.Component {
     super(props, context);
     this.state = {
       pack: {},
+      allPackCards: [],
       packCards: [],
       deckCards: [],
       hash: this.props.hash,
-      saving: false
+      saving: false,
+      showPastPicks: false
     };
     this.savePick = this.savePick.bind(this);
+    this.togglePastPicks = this.togglePastPicks.bind(this);
   }
 
   componentDidMount() {
     this.props.actions.loadPackCards(this.state.hash);
     this.props.actions.loadDeckCards(this.state.hash);
     this.props.actions.preloadImages(this.state.hash);
+    sessionStorage.setItem('draft_academy_hash', this.state.hash);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,6 +38,10 @@ class PackPage extends React.Component {
     if (JSON.stringify(this.props.pack) != JSON.stringify(nextProps.pack)) {
       //console.log('receiveprops: load pack', nextProps);
       this.setState({pack: nextProps.pack});
+    }
+    if (JSON.stringify(this.props.allPackCards) != JSON.stringify(nextProps.allPackCards)) {
+      //console.log('receiveprops: load pack cards', this.props.packCards, nextProps.packCards);
+      this.setState({allPackCards: nextProps.allPackCards});
     }
     if (JSON.stringify(this.props.packCards) != JSON.stringify(nextProps.packCards)) {
       //console.log('receiveprops: load pack cards', this.props.packCards, nextProps.packCards);
@@ -47,31 +55,46 @@ class PackPage extends React.Component {
 
   savePick(event) {
     event.preventDefault();
-    this.setState({saving: true});
+    this.setState({saving: true, showPastPicks: false});
     this.props.actions.makePick(event.currentTarget.getAttribute('data-value'));
+  }
+
+  togglePastPicks() {
+    let newShowPastPicks = !this.state.showPastPicks;
+    let packCards = collectPackCards(this.state.allPackCards, this.state.pack, newShowPastPicks);
+    this.setState({packCards: packCards});
+    this.setState({showPastPicks: newShowPastPicks});
   }
 
 
   render() {
-    const packCards = this.state.packCards;
-    const deckCards = this.state.deckCards;
     var pack_title = 'Your Pack';
     var pick_title = '';
+    var deck_number = '';
     var pack_card_list = <p>Waiting for your next pack to be passed</p>;
+    var past_picks_button = this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks';
     if (this.props.pack.number > 0) {
       pack_title = "Pack " + this.state.pack.number;
-      pick_title = <small>(Pick {(deckCards.length + 1)})</small>;
-      pack_card_list = <PackCardList packCards={packCards} onClick={this.savePick} />;
+      pick_title = <small>(Pick {((this.state.deckCards.length + 1) % 15)})</small>;
+      pack_card_list = <PackCardList packCards={this.state.packCards} onClick={this.savePick} />;
+      deck_number = <small>({this.state.deckCards.length} Cards)</small>;
     }
     return (
       <div className="row">
-        <div className="col-md-6">
-          <h1>{pack_title} {pick_title}</h1>
+        <div className="col-md-7">
+          <div className="row">
+            <div className="col-md-8">
+              <h1>{pack_title} {pick_title}</h1>
+            </div>
+            <div className="col-md-4">
+              <button onClick={this.togglePastPicks} className={this.state.showPastPicks ? 'btn btn-default' : 'btn btn-primary'} style={{marginTop: '20px'}}><span className={this.state.showPastPicks ? 'glyphicon glyphicon-eye-close' : 'glyphicon glyphicon-eye-open'}></span> {this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks'}</button>
+            </div>
+          </div>
           {pack_card_list}
         </div>
-        <div className="col-md-6">
-          <h1>Your Deck</h1>
-          <DeckCardList deckCards={deckCards} />
+        <div className="col-md-5">
+          <h1>Your Deck {deck_number}</h1>
+          <DeckCardList deckCards={this.state.deckCards} />
         </div>
       </div>
     );
@@ -80,15 +103,16 @@ class PackPage extends React.Component {
 
 PackPage.propTypes = {
   pack: PropTypes.object.isRequired,
+  allPackCards: PropTypes.array.isRequired,
   packCards: PropTypes.array.isRequired,
   deckCards: PropTypes.array.isRequired,
   hash: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired
 };
 
-function collectPackCards(packCards, pack) {
+function collectPackCards(packCards, pack, showPastPicks) {
   let selected = packCards.map(packCard => {
-    if (packCard.pack_id == pack.id && !packCard.deck_id) {
+    if (packCard.pack_id == pack.id && (showPastPicks || !packCard.deck_id)) {
       return packCard;
     }
   });
@@ -103,9 +127,9 @@ function mapStateToProps(state, ownProps) {
   if (state.packs.length > 0 && state.packCards.length > 0) {
     let packId = state.packCards[0].pack_id;
     pack = Object.assign({}, state.packs.find(pack => pack ? pack.id == packId : false));
-    packCards = collectPackCards(state.packCards, pack);
+    packCards = collectPackCards(state.packCards, pack, state.showPastPicks);
   }
-  return {pack: pack, packCards: packCards, deckCards: deckCards, hash: hash};
+  return {pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
 }
 
 function mapDispatchToProps(dispatch) {

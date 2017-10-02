@@ -8,9 +8,9 @@ class PackCardList extends React.Component {
     return (
         <div className="row">
           {this.props.packCards.map(packCard =>
-            <div className="col-sm-4" key={'pack_card:' + packCard.id}>
-              <a style={linkDisplay} onClick={this.props.onClick} data-value={packCard.id}>
-                <img className="img-responsive" src={packCard.image_url} alt={packCard.id}/>
+            <div className="col-sm-4 col-xs-6" key={'pack_card:' + packCard.id}>
+              <a style={linkDisplay} onClick={packCard.deck_id ? null : this.props.onClick} data-value={packCard.id} style={{cursor: packCard.deck_id ? 'default' : 'pointer'}}>
+                <img className="img-responsive" src={packCard.image_url} alt={packCard.id} style={{opacity: packCard.deck_id ? 0.5 : 1.0}}/>
               </a>
             </div>
           )}

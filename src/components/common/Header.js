@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link, IndexLink } from 'react-router';
 
 const Header = () => {
+  let last_player_hash = sessionStorage.getItem('draft_academy_hash');
+  let last_player_link = last_player_hash ? <li><Link to={`/players/${last_player_hash}/pack`}>Continue Draft</Link></li> : '';
   return (
     <nav className="navbar navbar-inverse">
       <div className="container-fluid">
@@ -18,8 +20,7 @@ const Header = () => {
 
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul className="nav navbar-nav">
-            <li className="active"><a href="#">Link <span className="sr-only">(current)</span></a></li>
-            <li><a href="#">Link</a></li>
+            {last_player_link}
           </ul>
         </div>
       </div>
