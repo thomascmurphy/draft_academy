@@ -24,6 +24,7 @@ class PackPage extends React.Component {
     };
     this.savePick = this.savePick.bind(this);
     this.togglePastPicks = this.togglePastPicks.bind(this);
+    this.nextPackCheck = this.nextPackCheck.bind(this);
   }
 
   componentDidMount() {
@@ -31,7 +32,7 @@ class PackPage extends React.Component {
     this.props.actions.loadDeckCards(this.state.hash);
     this.props.actions.preloadImages(this.state.hash);
     sessionStorage.setItem('draft_academy_hash', this.state.hash);
-    var nextPackCheckIntervalId = setInterval(this.nextPackCheck, 60000)
+    let nextPackCheckIntervalId = setInterval(this.nextPackCheck, 60000)
   }
 
   componentWillUnmount() {
