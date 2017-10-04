@@ -19,8 +19,7 @@ class PackPage extends React.Component {
       hash: this.props.hash,
       saving: false,
       showPastPicks: false,
-      nextPackCheckIntervalId: null,
-      newPackFavicon: ""
+      nextPackCheckIntervalId: null
     };
     this.savePick = this.savePick.bind(this);
     this.togglePastPicks = this.togglePastPicks.bind(this);
@@ -100,7 +99,7 @@ class PackPage extends React.Component {
         <div className="col-md-7">
           <div className="row">
             <div className="col-md-8">
-              {this.state.newPackFavicon}
+              {favicon}
               <h1>{pack_title} {pick_title}</h1>
             </div>
             <div className="col-md-4">
