@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import Favicon from 'react-favicon';
 import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import PackCardList from './PackCardList';
@@ -17,7 +18,9 @@ class PackPage extends React.Component {
       deckCards: [],
       hash: this.props.hash,
       saving: false,
-      showPastPicks: false
+      showPastPicks: false,
+      nextPackCheckIntervalId: null,
+      newPackFavicon: ""
     };
     this.savePick = this.savePick.bind(this);
     this.togglePastPicks = this.togglePastPicks.bind(this);
@@ -28,6 +31,11 @@ class PackPage extends React.Component {
     this.props.actions.loadDeckCards(this.state.hash);
     this.props.actions.preloadImages(this.state.hash);
     sessionStorage.setItem('draft_academy_hash', this.state.hash);
+    var nextPackCheckIntervalId = setInterval(this.nextPackCheck, 60000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.nextPackCheckIntervalId)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,10 +61,24 @@ class PackPage extends React.Component {
     }
   }
 
+  nextPackCheck() {
+    if (this.state.packCards.length == 0) {
+      this.props.actions.loadPackCards(this.state.hash).then((response) => {
+        if (this.state.packCards.length > 0) {
+          this.setState({newPackFavicon: <Favicon url="http://oflisback.github.io/react-favicon/public/img/github.ico" />})
+        }
+      });
+    }
+  }
+
   savePick(event) {
     event.preventDefault();
     this.setState({saving: true, showPastPicks: false});
-    this.props.actions.makePick(event.currentTarget.getAttribute('data-value'));
+    this.props.actions.makePick(event.currentTarget.getAttribute('data-value')).then((response) => {
+      if (this.state.packCards.length == 0) {
+        this.setState({newPackFavicon: "", saving: false})
+      }
+    });
   }
 
   togglePastPicks() {
@@ -84,6 +106,7 @@ class PackPage extends React.Component {
         <div className="col-md-7">
           <div className="row">
             <div className="col-md-8">
+              {this.state.newPackFavicon}
               <h1>{pack_title} {pick_title}</h1>
             </div>
             <div className="col-md-4">
