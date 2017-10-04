@@ -64,22 +64,14 @@ class PackPage extends React.Component {
 
   nextPackCheck() {
     if (this.state.packCards.length == 0) {
-      this.props.actions.loadPackCards(this.state.hash).then((response) => {
-        if (this.state.packCards.length > 0) {
-          this.setState({newPackFavicon: <Favicon url="http://oflisback.github.io/react-favicon/public/img/github.ico" />})
-        }
-      });
+      this.props.actions.loadPackCards(this.state.hash);
     }
   }
 
   savePick(event) {
     event.preventDefault();
     this.setState({saving: true, showPastPicks: false});
-    this.props.actions.makePick(event.currentTarget.getAttribute('data-value')).then((response) => {
-      if (this.state.packCards.length == 0) {
-        this.setState({newPackFavicon: "", saving: false})
-      }
-    });
+    this.props.actions.makePick(event.currentTarget.getAttribute('data-value'));
   }
 
   togglePastPicks() {
@@ -96,6 +88,7 @@ class PackPage extends React.Component {
     var deck_number = '';
     var pack_card_list = <p>Waiting for your next pack to be passed</p>;
     var past_picks_button = this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks';
+    var favicon = this.state.packCards.length > 0 ? <Favicon url="http://oflisback.github.io/react-favicon/public/img/github.ico" /> : '';
     if (this.props.pack.number > 0) {
       pack_title = "Pack " + this.state.pack.number;
       pick_title = <small>(Pick {((this.state.deckCards.length % 15) + 1)})</small>;
