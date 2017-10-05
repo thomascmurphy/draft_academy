@@ -87,7 +87,7 @@ class PackPage extends React.Component {
     var deck_number = '';
     var pack_card_list = <p>Waiting for your next pack to be passed</p>;
     var past_picks_button = this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks';
-    var favicon = this.state.packCards.length > 0 ? <Favicon url="http://oflisback.github.io/react-favicon/public/img/github.ico" /> : '';
+    var favicon = this.state.packCards.length > 0 ? <Favicon url="/favicon_alert.ico" /> : <Favicon url="/favicon.ico" />;
     if (this.props.pack.number > 0) {
       pack_title = "Pack " + this.state.pack.number;
       pick_title = <small>(Pick {((this.state.deckCards.length % 15) + 1)})</small>;
