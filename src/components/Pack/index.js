@@ -12,6 +12,7 @@ class PackPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      player: {},
       pack: {},
       allPackCards: [],
       packCards: [],
@@ -31,7 +32,8 @@ class PackPage extends React.Component {
     this.props.actions.loadDeckCards(this.state.hash);
     this.props.actions.preloadImages(this.state.hash);
     sessionStorage.setItem('draft_academy_hash', this.state.hash);
-    let nextPackCheckIntervalId = setInterval(this.nextPackCheck, 60000)
+    let nextPackCheckIntervalId = setInterval(this.nextPackCheck, 60000);
+    this.setState({nextPackCheckIntervalId: nextPackCheckIntervalId});
   }
 
   componentWillUnmount() {
@@ -42,6 +44,10 @@ class PackPage extends React.Component {
     if (this.props.hash != nextProps.hash) {
       //console.log('receiveprops: player', nextProps);
       this.setState({hash: nextProps.hash});
+    }
+    if (JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
+      //console.log('receiveprops: load pack', nextProps);
+      this.setState({player: nextProps.player});
     }
     if (JSON.stringify(this.props.pack) != JSON.stringify(nextProps.pack)) {
       //console.log('receiveprops: load pack', nextProps);
@@ -118,6 +124,7 @@ class PackPage extends React.Component {
 }
 
 PackPage.propTypes = {
+  player: PropTypes.object.isRequired,
   pack: PropTypes.object.isRequired,
   allPackCards: PropTypes.array.isRequired,
   packCards: PropTypes.array.isRequired,
@@ -138,16 +145,24 @@ function collectPackCards(packCards, deckCards, pack, showPastPicks) {
 }
 
 function mapStateToProps(state, ownProps) {
+  let player = {}
   let pack = {set_code: '', number: 0, complete: false};
   let packCards = [];
   let deckCards = state.deckCards.length > 0 ? state.deckCards : [];
   const hash = ownProps.params.hash;
+  if (state.players.length > 0) {
+    player = state.players.filter(player => player.hash == hash)[0];
+  }
+  if (state.decks.length > 0 && player.id) {
+    let deck = state.decks.filter(deck => deck.player_id == player.id)[0];
+    deckCards = (deck && deck.id) ? state.deckCards.filter(deckCard => deckCard.deck_id == deck.id) : deckCards;
+  }
   if (state.packs.length > 0 && state.packCards.length > 0) {
     let packId = state.packCards[0].pack_id;
     pack = Object.assign({}, state.packs.find(pack => pack ? pack.id == packId : false));
     packCards = collectPackCards(state.packCards, deckCards, pack, state.showPastPicks, false);
   }
-  return {pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
+  return {player: player, pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
 }
 
 function mapDispatchToProps(dispatch) {
