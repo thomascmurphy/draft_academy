@@ -6,7 +6,7 @@ const PodList = ({pods}) => {
   return (
       <ul className="list-group">
         {pods.map(pod =>
-          <Link to={'/players/' + pod.player_hash + '/pack'} key={pod.id} className={!pod.complete ? "list-group-item list-group-item-success" : "list-group-item"} activeClassName="active">{pod.name}<span className="badge">{pod.complete ? "Complete" : "Ongoing"}</span></Link>
+          <Link to={!pod.complete ? `/players/${pod.player_hash}/pack` : `/pods/${pod.id}/recap`} key={pod.id} className={!pod.complete ? "list-group-item list-group-item-success" : "list-group-item"} activeClassName="active">{pod.name}<span className="badge">{pod.complete ? "Complete" : "Ongoing"}</span></Link>
         )}
       </ul>
   );
