@@ -62,5 +62,9 @@
 }
 
 .sticky_control.affix + .row {
-  padding-top: 100px;
+  padding-top: 60px;
+}
+
+.no-margin {
+  margin: 0;
 }
