@@ -41,6 +41,7 @@ export function loadPackCards(hash) {
     return playerApi.getPack(hash).then(response => {
       dispatch(loadPackCardsSuccess(response.pack_cards));
       dispatch(filterPacksSuccess([response.pack]));
+      dispatch(loadPlayersSuccess([response.player]));
     }).catch(error => {
       throw(error);
     });
@@ -52,15 +53,16 @@ export function loadDeckCards(hash) {
     return playerApi.getDeck(hash).then(response => {
       dispatch(loadDeckCardsSuccess(response.deck_cards));
       dispatch(filterDecksSuccess([response.deck]));
+      dispatch(loadPlayersSuccess([response.player]));
     }).catch(error => {
       throw(error);
     });
   };
 }
 
-export function makePick(packCardId) {
+export function makePick(packCardId, playerId) {
   return function(dispatch) {
-    return playerApi.makePick(packCardId).then(response => {
+    return playerApi.makePick(packCardId, playerId).then(response => {
       dispatch(loadPackCardsSuccess(response.pack_cards));
       dispatch(loadDeckCardsSuccess(response.deck_cards));
       dispatch(filterPacksSuccess([response.pack]));

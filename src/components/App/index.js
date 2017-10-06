@@ -6,12 +6,12 @@ import Header from '../common/Header';
 
 class App extends React.Component {
   render() {
-    return (
-      <div className="container-fluid">
-        <Header />
+    return ([
+      <Header key="header" />,
+      <div className="container-fluid" key="content">
         {this.props.children}
       </div>
-    );
+    ]);
   }
 }
 

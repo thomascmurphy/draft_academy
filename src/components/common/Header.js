@@ -6,7 +6,7 @@ const Header = () => {
   let last_player_hash = sessionStorage.getItem('draft_academy_hash');
   let last_player_link = last_player_hash ? <li><Link to={`/players/${last_player_hash}/pack`}>Continue Draft</Link></li> : '';
   return (
-    <nav className="navbar navbar-inverse">
+    <nav className="navbar navbar-inverse navbar-static-top">
       <div className="container-fluid">
         <div className="navbar-header">
           <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">

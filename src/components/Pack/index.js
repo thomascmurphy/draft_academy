@@ -68,15 +68,13 @@ class PackPage extends React.Component {
   }
 
   nextPackCheck() {
-    if (this.state.packCards.length == 0) {
-      this.props.actions.loadPackCards(this.state.hash);
-    }
+    this.props.actions.loadPackCards(this.state.hash);
   }
 
   savePick(event) {
     event.preventDefault();
     this.setState({saving: true, showPastPicks: false});
-    this.props.actions.makePick(event.currentTarget.getAttribute('data-value'));
+    this.props.actions.makePick(event.currentTarget.getAttribute('data-value'), this.state.player.id);
   }
 
   togglePastPicks() {

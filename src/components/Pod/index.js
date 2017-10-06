@@ -54,15 +54,16 @@ class PodPage extends React.Component {
   }
 
   render() {
-    let content = this.state.pod.complete ? <PodPlayerList players={this.state.players} /> : <div class="well">This pod is still ongoing...</div>
+    let showRecap = this.state.pod.complete || this.props.location.query.cheat
+    let content = showRecap ? <PodPlayerList players={this.state.players} /> : <div className="well">This pod is still ongoing...</div>
     return ([
-      <div className="row bg-white shadow-bottom" key="pod_header" data-spy="affix" data-offset-top="70" style={{padding: "10px 0px"}}>
-        <div className="col-md-6">
+      <div className="row bg-white shadow-bottom sticky_control" key="pod_header" data-spy="affix" data-offset-top="70" style={{padding: "10px 0px", height: "100px"}}>
+        <div className="col-sm-6 hidden-xs">
           <h1>Pod: {this.state.pod.name} <small>({this.state.pod.pack_1_set}, {this.state.pod.pack_2_set}, {this.state.pod.pack_3_set})</small></h1>
         </div>
-        <div className="col-md-6">
-          <h2 className="text-center">Pick #{this.state.pickNumber}</h2>
-          <input type="range" name="pickNumber" onChange={this.changePickNumber} defaultValue={this.state.pickNumber} min="1" max={this.state.pickCount} step="1" disabled={!this.state.pod.complete}/>
+        <div className="col-sm-6">
+          <h3 className="text-center">Pick #{this.state.pickNumber}</h3>
+          <input type="range" name="pickNumber" onChange={this.changePickNumber} defaultValue={this.state.pickNumber} min="1" max={this.state.pickCount} step="1" disabled={!showRecap}/>
         </div>
       </div>,
       <div className="row" key="pod_content">

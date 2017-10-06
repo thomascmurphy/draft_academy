@@ -18,9 +18,9 @@ class HomePage extends React.Component {
       saving: false,
       pod: {
         name: '',
-        pack_1_set: 'HOU',
-        pack_2_set: 'HOU',
-        pack_3_set: 'AKH',
+        pack_1_set: 'XLN',
+        pack_2_set: 'XLN',
+        pack_3_set: 'XLN',
         players: [{email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}]
       }
     };

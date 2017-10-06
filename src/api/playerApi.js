@@ -26,16 +26,14 @@ class PlayerApi {
     });
   }
 
-  static makePick(packCardId) {
-    var formData = new FormData();
-    formData.append('pack_card_id', packCardId);
+  static makePick(packCardId, playerId) {
     const request = new Request(`${process.env.REACT_APP_API_HOST}/api/v1/players/pick`, {
       method: 'post',
       headers: new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }),
-      body: JSON.stringify({pack_card_id: packCardId}),
+      body: JSON.stringify({pack_card_id: packCardId, player_id: playerId}),
       mode: 'cors'
     });
 
