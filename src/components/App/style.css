@@ -5,9 +5,17 @@
   margin: 5px;
 }
 
+.deck_card.stacked {
+  height: 20px;
+}
+
 .deck_card.mini {
   width: 50px;
   margin: 2px;
+}
+
+.deck_card.large {
+  width: 150px;
 }
 
 .img_zoom {
@@ -45,6 +53,14 @@
   -moz-transform:scale(4);
   -webkit-transform:scale(4);
   -o-transform:scale(4);
+}
+
+.img_zoom.large img:hover {
+  transform:scale(1.5);
+  -ms-transform:scale(1.5);
+  -moz-transform:scale(1.5);
+  -webkit-transform:scale(1.5);
+  -o-transform:scale(1.5);
 }
 
 .row.affix {
