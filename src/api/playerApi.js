@@ -44,6 +44,24 @@ class PlayerApi {
     });
   }
 
+  static updateDeckCard(deckCard) {
+    const request = new Request(`${process.env.REACT_APP_API_HOST}/api/v1/players/update_deck_card`, {
+      method: 'PUT',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({deck_card: deckCard}),
+      mode: 'cors'
+    });
+
+    return fetch(request).then(response => {
+      return response.json();
+    }).catch(error => {
+      return error;
+    });
+  }
+
   static getCardImages(hash) {
     if (!hash) { hash = '';}
     return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/players/` + hash + '/card_images').then(response => {

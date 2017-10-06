@@ -13,8 +13,16 @@ export function loadPackCardsSuccess(pack_cards) {
   return {type: types.LOAD_PACK_CARDS_SUCCESS, pack_cards};
 }
 
+export function loadPackCardSuccess(pack_card) {
+  return {type: types.LOAD_PACK_CARD_SUCCESS, pack_card};
+}
+
 export function loadDeckCardsSuccess(deck_cards) {
   return {type: types.LOAD_DECK_CARDS_SUCCESS, deck_cards};
+}
+
+export function loadDeckCardSuccess(deck_card) {
+  return {type: types.LOAD_DECK_CARD_SUCCESS, deck_card};
 }
 
 export function filterPacksSuccess(packs) {
@@ -42,6 +50,7 @@ export function loadPackCards(hash) {
       dispatch(loadPackCardsSuccess(response.pack_cards));
       dispatch(filterPacksSuccess([response.pack]));
       dispatch(loadPlayersSuccess([response.player]));
+      dispatch(filterPodsSuccess([response.pod]));
     }).catch(error => {
       throw(error);
     });
@@ -66,6 +75,17 @@ export function makePick(packCardId, playerId) {
       dispatch(loadPackCardsSuccess(response.pack_cards));
       dispatch(loadDeckCardsSuccess(response.deck_cards));
       dispatch(filterPacksSuccess([response.pack]));
+      dispatch(filterPodsSuccess([response.pod]));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
+export function updateDeckCard(deckCard) {
+  return function(dispatch) {
+    return playerApi.updateDeckCard(deckCard).then(response => {
+      dispatch(loadDeckCardSuccess(response.deck_card));
     }).catch(error => {
       throw(error);
     });

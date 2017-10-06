@@ -7,11 +7,13 @@ import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import PackCardList from './PackCardList';
 import DeckCardList from './DeckCardList';
+import DeckBuilder from './DeckBuilder';
 
 class PackPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      pod: {},
       player: {},
       pack: {},
       allPackCards: [],
@@ -25,6 +27,7 @@ class PackPage extends React.Component {
     this.savePick = this.savePick.bind(this);
     this.togglePastPicks = this.togglePastPicks.bind(this);
     this.nextPackCheck = this.nextPackCheck.bind(this);
+    this.toggleSideboard = this.toggleSideboard.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +47,10 @@ class PackPage extends React.Component {
     if (this.props.hash != nextProps.hash) {
       //console.log('receiveprops: player', nextProps);
       this.setState({hash: nextProps.hash});
+    }
+    if (JSON.stringify(this.props.pod) != JSON.stringify(nextProps.pod)) {
+      //console.log('receiveprops: load pack', nextProps);
+      this.setState({pod: nextProps.pod});
     }
     if (JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
       //console.log('receiveprops: load pack', nextProps);
@@ -84,8 +91,16 @@ class PackPage extends React.Component {
     this.setState({showPastPicks: newShowPastPicks});
   }
 
+  toggleSideboard(event) {
+    event.preventDefault();
+    let updateDeckCard = this.state.deckCards.filter(deckCard => deckCard.id == event.currentTarget.getAttribute('data-value'))[0];
+    updateDeckCard.sideboard = updateDeckCard.sideboard == 0 ? 1 : 0;
+    this.props.actions.updateDeckCard(updateDeckCard);
+  }
+
 
   render() {
+    var pod_complete = this.state.pod && this.state.pod.complete;
     var pack_title = 'Your Pack';
     var pick_title = '';
     var deck_number = '';
@@ -98,30 +113,43 @@ class PackPage extends React.Component {
       pack_card_list = <PackCardList packCards={this.state.packCards} onClick={this.savePick} />;
       deck_number = <small>({this.state.deckCards.length} Cards)</small>;
     }
-    return (
-      <div className="row">
-        <div className="col-md-7">
-          <div className="row">
-            <div className="col-md-8">
-              {favicon}
-              <h1>{pack_title} {pick_title}</h1>
-            </div>
-            <div className="col-md-4">
-              <button onClick={this.togglePastPicks} className={this.state.showPastPicks ? 'btn btn-default' : 'btn btn-primary'} style={{marginTop: '20px'}}><span className={this.state.showPastPicks ? 'glyphicon glyphicon-eye-close' : 'glyphicon glyphicon-eye-open'}></span> {this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks'}</button>
-            </div>
+    if (pod_complete) {
+      return (
+        <div className="row">
+          <div className="col-md-12">
+            <h1>Deckbuilder</h1>
+            <DeckBuilder deckCards={this.state.deckCards} onClick={this.toggleSideboard}/>
           </div>
-          {pack_card_list}
         </div>
-        <div className="col-md-5">
-          <h1>Your Deck {deck_number}</h1>
-          <DeckCardList deckCards={this.state.deckCards} />
+      );
+    }
+    else {
+      return (
+        <div className="row">
+          <div className="col-md-7">
+            <div className="row">
+              <div className="col-md-8">
+                {favicon}
+                <h1>{pack_title} {pick_title}</h1>
+              </div>
+              <div className="col-md-4">
+                <button onClick={this.togglePastPicks} className={this.state.showPastPicks ? 'btn btn-default' : 'btn btn-primary'} style={{marginTop: '20px'}}><span className={this.state.showPastPicks ? 'glyphicon glyphicon-eye-close' : 'glyphicon glyphicon-eye-open'}></span> {this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks'}</button>
+              </div>
+            </div>
+            {pack_card_list}
+          </div>
+          <div className="col-md-5">
+            <h1>Your Deck {deck_number}</h1>
+            <DeckCardList deckCards={this.state.deckCards} />
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
 PackPage.propTypes = {
+  pod: PropTypes.object.isRequired,
   player: PropTypes.object.isRequired,
   pack: PropTypes.object.isRequired,
   allPackCards: PropTypes.array.isRequired,
@@ -143,6 +171,7 @@ function collectPackCards(packCards, deckCards, pack, showPastPicks) {
 }
 
 function mapStateToProps(state, ownProps) {
+  let pod = {}
   let player = {}
   let pack = {set_code: '', number: 0, complete: false};
   let packCards = [];
@@ -150,6 +179,9 @@ function mapStateToProps(state, ownProps) {
   const hash = ownProps.params.hash;
   if (state.players.length > 0) {
     player = state.players.filter(player => player.hash == hash)[0];
+    if (state.pods.length > 0) {
+      pod = state.pods.filter(pod => pod.id == player.pod_id)[0];
+    }
   }
   if (state.decks.length > 0 && player.id) {
     let deck = state.decks.filter(deck => deck.player_id == player.id)[0];
@@ -160,7 +192,7 @@ function mapStateToProps(state, ownProps) {
     pack = Object.assign({}, state.packs.find(pack => pack ? pack.id == packId : false));
     packCards = collectPackCards(state.packCards, deckCards, pack, state.showPastPicks, false);
   }
-  return {player: player, pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
+  return {pod: pod, player: player, pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
 }
 
 function mapDispatchToProps(dispatch) {
