@@ -7,7 +7,6 @@ import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import PackCardList from './PackCardList';
 import DeckCardList from './DeckCardList';
-import DeckBuilder from './DeckBuilder';
 
 class PackPage extends React.Component {
   constructor(props, context) {
@@ -27,7 +26,6 @@ class PackPage extends React.Component {
     this.savePick = this.savePick.bind(this);
     this.togglePastPicks = this.togglePastPicks.bind(this);
     this.nextPackCheck = this.nextPackCheck.bind(this);
-    this.toggleSideboard = this.toggleSideboard.bind(this);
   }
 
   componentDidMount() {
@@ -91,13 +89,6 @@ class PackPage extends React.Component {
     this.setState({showPastPicks: newShowPastPicks});
   }
 
-  toggleSideboard(event) {
-    event.preventDefault();
-    let updateDeckCard = this.state.deckCards.filter(deckCard => deckCard.id == event.currentTarget.getAttribute('data-value'))[0];
-    updateDeckCard.sideboard = updateDeckCard.sideboard == 0 ? 1 : 0;
-    this.props.actions.updateDeckCard(updateDeckCard);
-  }
-
 
   render() {
     var pod_complete = this.state.pod && this.state.pod.complete;
@@ -113,38 +104,26 @@ class PackPage extends React.Component {
       pack_card_list = <PackCardList packCards={this.state.packCards} onClick={this.savePick} />;
       deck_number = <small>({this.state.deckCards.length} Cards)</small>;
     }
-    if (pod_complete) {
-      return (
-        <div className="row">
-          <div className="col-md-12">
-            <h1>Deckbuilder</h1>
-            <DeckBuilder deckCards={this.state.deckCards} onClick={this.toggleSideboard}/>
-          </div>
-        </div>
-      );
-    }
-    else {
-      return (
-        <div className="row">
-          <div className="col-md-7">
-            <div className="row">
-              <div className="col-md-8">
-                {favicon}
-                <h1>{pack_title} {pick_title}</h1>
-              </div>
-              <div className="col-md-4">
-                <button onClick={this.togglePastPicks} className={this.state.showPastPicks ? 'btn btn-default' : 'btn btn-primary'} style={{marginTop: '20px'}}><span className={this.state.showPastPicks ? 'glyphicon glyphicon-eye-close' : 'glyphicon glyphicon-eye-open'}></span> {this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks'}</button>
-              </div>
+    return (
+      <div className="row">
+        <div className="col-md-7">
+          <div className="row">
+            <div className="col-md-8">
+              {favicon}
+              <h1>{pack_title} {pick_title}</h1>
             </div>
-            {pack_card_list}
+            <div className="col-md-4">
+              <button onClick={this.togglePastPicks} className={this.state.showPastPicks ? 'btn btn-default' : 'btn btn-primary'} style={{marginTop: '20px'}}><span className={this.state.showPastPicks ? 'glyphicon glyphicon-eye-close' : 'glyphicon glyphicon-eye-open'}></span> {this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks'}</button>
+            </div>
           </div>
-          <div className="col-md-5">
-            <h1>Your Deck {deck_number}</h1>
-            <DeckCardList deckCards={this.state.deckCards} />
-          </div>
+          {pack_card_list}
         </div>
-      );
-    }
+        <div className="col-md-5">
+          <h1>Your Deck {deck_number}</h1>
+          <DeckCardList deckCards={this.state.deckCards} />
+        </div>
+      </div>
+    );
   }
 }
 

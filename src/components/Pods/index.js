@@ -7,7 +7,7 @@ import PodList from './PodList';
 class PodsPage extends React.Component {
   render() {
     const pods = this.props.pods;
-    let content = <div className="well text-center">You haven't been a part of any pods yet :(</div>
+    let content = <div className="well text-center">You have not been a part of any pods yet :(</div>
     if (pods && pods.length) {
       content = <PodList pods={pods} />
     }

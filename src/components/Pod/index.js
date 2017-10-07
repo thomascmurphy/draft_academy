@@ -60,12 +60,12 @@ class PodPage extends React.Component {
     return ([
       <div className="row bg-white shadow-bottom sticky_control" key="pod_header" data-spy="affix" data-offset-top="70" style={{padding: "10px 0px", height: "60px"}}>
         <div className="col-sm-6 hidden-xs">
-          <h2 className="no-margin">Pod: {this.state.pod.name} <small>({this.state.pod.pack_1_set}, {this.state.pod.pack_2_set}, {this.state.pod.pack_3_set})</small></h2>
+          <h2 className="no_margin">Pod: {this.state.pod.name} <small>({this.state.pod.pack_1_set}, {this.state.pod.pack_2_set}, {this.state.pod.pack_3_set})</small></h2>
         </div>
         <div className="col-sm-6">
           <div className="row">
             <div className="col-xs-3">
-              <h3 className="text-right no-margin">Pick #{this.state.pickNumber}</h3>
+              <h3 className="text-right no_margin">Pick #{this.state.pickNumber}</h3>
             </div>
             <div className="col-xs-9">
               <input type="range" name="pickNumber" onChange={this.changePickNumber} defaultValue={this.state.pickNumber} min="1" max={this.state.pickCount} step="1" disabled={!showRecap}/>

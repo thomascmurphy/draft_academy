@@ -1,3 +1,142 @@
+.no_margin{
+    margin: 0 !important;
+}
+
+.no_margin_top{
+    margin-top: 0 !important;
+}
+
+.no_margin_right{
+    margin-right: 0 !important;
+}
+
+.no_margin_bottom{
+    margin-bottom: 0 !important;
+}
+
+.no_margin_left{
+    margin-left: 0 !important;
+}
+
+.margin_all{
+    margin: 1em;
+}
+
+.margin_top{
+    margin-top: 1em;
+}
+
+.margin_right{
+    margin-right: 1em;
+}
+
+.margin_bottom{
+    margin-bottom: 1em;
+}
+
+.margin_left{
+    margin-left: 1em;
+}
+
+.large_margin_all{
+    margin: 2em;
+}
+
+.large_margin_top{
+    margin-top: 2em;
+}
+
+.large_margin_right{
+    margin-right: 2em;
+}
+
+.large_margin_bottom{
+    margin-bottom: 2em;
+}
+
+.large_margin_left{
+    margin-left: 2em;
+}
+
+.no_padding{
+    padding: 0 !important;
+}
+
+.no_padding_top{
+    padding-top: 0 !important;
+}
+
+.no_padding_right{
+    padding-right: 0 !important;
+}
+
+.no_padding_bottom{
+    padding-bottom: 0 !important;
+}
+
+.no_padding_left{
+    padding-left: 0 !important;
+}
+
+@-moz-keyframes spinnerRotate {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spinnerRotate {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spinnerRotate {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+
+.spinning {
+  animation: spinnerRotate 2s infinite linear;
+	-moz-animation: spinnerRotate 2s infinite linear;
+	-webkit-animation: spinnerRotate 2s infinite linear;
+}
+
+.loading:before{
+    content:"";
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 500;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.loading:after{
+  content:"";
+  display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -50px 0 0 -50px;
+	height: 100px;
+	width: 100px;
+	text-indent: 250px;
+	white-space: nowrap;
+	overflow: hidden;
+	-webkit-mask-image: image-url("spinner.png");
+	background-color: $cyan;
+	animation: spinnerRotate 2s infinite linear;
+	-moz-animation: spinnerRotate 2s infinite linear;
+	-webkit-animation: spinnerRotate 2s infinite linear;
+	z-index: 501;
+}
+
+
+
+
+
+
+
+
+
 
 .deck_card {
   width: 100px;
@@ -15,7 +154,7 @@
 }
 
 .deck_card.large {
-  width: 150px;
+  width: 125px;
 }
 
 .img_zoom {
@@ -79,24 +218,4 @@
 
 .sticky_control.affix + .row {
   padding-top: 60px;
-}
-
-.no-margin {
-  margin: 0;
-}
-
-.no-margin-top {
-  margin-top: 0;
-}
-
-.no-margin-bottom {
-  margin-bottom: 0;
-}
-
-.no-margin-left {
-  margin-left: 0;
-}
-
-.no-margin-right {
-  margin-right: 0;
 }

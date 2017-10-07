@@ -4,11 +4,19 @@ import { Link, IndexLink } from 'react-router';
 
 const PodList = ({pods}) => {
   return (
-      <ul className="list-group">
-        {pods.map(pod =>
-          <Link to={!pod.complete ? `/players/${pod.player_hash}/pack` : `/pods/${pod.id}/recap`} key={pod.id} className={!pod.complete ? "list-group-item list-group-item-success" : "list-group-item"} activeClassName="active">{pod.name}<span className="badge">{pod.complete ? "Complete" : "Ongoing"}</span></Link>
-        )}
-      </ul>
+      <table className="table">
+        <tbody>
+          {pods.map(pod =>
+            <tr key={pod.id} className={pod.complete ? '' : 'success'}>
+              <td><strong style={{marginRight: '5px'}}>{pod.name}</strong><span className="badge">{pod.complete ? 'Complete' : 'Ongoing'}</span></td>
+              <td className="text-right">
+                <Link to={!pod.complete ? `/players/${pod.player_hash}/pack` : `/pods/${pod.id}/recap`} className={!pod.complete ? "btn btn-xs btn-success" : "btn btn-xs btn-primary"}>{!pod.complete ? "Continue" : "Recap"}</Link>
+                <Link to={`/players/${pod.player_hash}/deck`} className={"btn btn-xs btn-info margin_left" + (pod.complete ? "" : " hidden")}>Your Deck</Link>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
   );
 };
 
