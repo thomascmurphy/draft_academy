@@ -9,6 +9,12 @@ class DeckBuilder extends React.Component {
   componentDidUpdate(pie_data) {
     var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard == 0);
     var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
+    var curveData = []
+    _.forOwn(deckCardsGroupedCmc, function(cmcCards, cmc) {
+      curveData.push({name: `${cmc} CMC`, value:cmcCards.length})
+    });
+    var curveOptions = {colors: ['#6bb8b6'], title: 'Mana Curve', bar_spacing: '5', aspect_ratio: 1.5, hover: true}
+
     var deckCardsColorCount = {white: 0, blue: 0, black: 0, red: 0, green: 0}
     deckCards.forEach(function(card) {
       deckCardsColorCount['white'] += (card.mana_cost.match(/W/g) || []).length;
@@ -28,31 +34,26 @@ class DeckBuilder extends React.Component {
         has_key: false,
         title: 'Color Profile'
     };
+
+    window.drawBar('#curve_bar', curveData, curveOptions);
     window.drawPie('#color_pie', pieData, pieOptions);
   }
 
   render() {
-    var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard == 0)
-    var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc')
-    var deckCardsGroupedColor = _.groupBy(deckCards, 'color_identity')
-    var sideboardCards = this.props.deckCards.filter(deckCard => deckCard.sideboard != 0)
+    var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard == 0);
+    var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
+    var sideboardCards = this.props.deckCards.filter(deckCard => deckCard.sideboard != 0);
+    var cmcColumnCount = 12 / (Object.keys(deckCardsGroupedCmc).length || 1);
+    cmcColumnCount = cmcColumnCount < 2 ? `1-5 col-xs-1` : Math.floor(cmcColumnCount);
 
     return ([
-        <div className="row" key="deckbuilder_stats">
-          <div className="col-xs-6">
-            <div id="color_pie"></div>
-          </div>
-          <div className="col-xs-6">
-
-          </div>
-        </div>,
         <div className="row" key="deckbuilder_deck">
           <div className="col-sm-8">
             <div className="well" style={{minHeight: '400px'}}>
               <h3 className="no_margin_top">Your Deck <small>({deckCards.length} Cards)</small></h3>
               <div className="row">
                 {Object.keys(deckCardsGroupedCmc).map((cmc,index) =>
-                  <div className="col-md-2 col-sm-3 col-xs-4" key={`cmc${cmc}`}>
+                  <div className={`col-xs-${cmcColumnCount}`} key={`cmc${cmc}`}>
                     {deckCardsGroupedCmc[cmc].map(deckCard =>
                       <div className="deck_card img_zoom stacked large" key={'deck_card:' + deckCard.id} onClick={this.props.onClick} data-value={deckCard.id}>
                         <img className="img-responsive" src={deckCard.image_url} alt={deckCard.id}/>
@@ -70,6 +71,14 @@ class DeckBuilder extends React.Component {
                 <img className="img-responsive" src={sideboardCard.image_url} alt={sideboardCard.id}/>
               </div>
             )}
+          </div>
+        </div>,
+        <div className="row" key="deckbuilder_stats">
+          <div className="col-sm-4 col-xs-6">
+            <div id="color_pie"></div>
+          </div>
+          <div className="col-sm-4 col-xs-6">
+            <div id="curve_bar"></div>
           </div>
         </div>
     ]);
