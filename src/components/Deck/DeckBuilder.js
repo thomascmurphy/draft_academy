@@ -13,7 +13,14 @@ class DeckBuilder extends React.Component {
     _.forOwn(deckCardsGroupedCmc, function(cmcCards, cmc) {
       curveData.push({name: `${cmc} CMC`, value:cmcCards.length})
     });
-    var curveOptions = {colors: ['#6bb8b6'], title: 'Mana Curve', bar_spacing: '5', aspect_ratio: 1.5, hover: true}
+    var curveOptions = {
+      colors: ['#eeeeee', '#cccccc', '#aaaaaa', '#999999', '#666666', '#333333', '#000000'],
+      title: 'Mana Curve',
+      bar_spacing: '5',
+      aspect_ratio: 1.5,
+      hover: true,
+      rounded_tops: true
+    }
 
     var deckCardsColorCount = {white: 0, blue: 0, black: 0, red: 0, green: 0}
     deckCards.forEach(function(card) {
