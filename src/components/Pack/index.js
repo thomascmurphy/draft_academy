@@ -8,6 +8,7 @@ import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import PackCardList from './PackCardList';
 import DeckCardList from './DeckCardList';
+import {browserHistory} from 'react-router';
 
 class PackPage extends React.Component {
   constructor(props, context) {
@@ -43,44 +44,45 @@ class PackPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.hash != nextProps.hash) {
-      //console.log('receiveprops: player', nextProps);
+    if (_.isEmpty(this.state.hash) || this.props.hash != nextProps.hash) {
       this.setState({hash: nextProps.hash});
     }
-    if (JSON.stringify(this.props.pod) != JSON.stringify(nextProps.pod)) {
-      //console.log('receiveprops: load pack', nextProps);
+    if (_.isEmpty(this.state.pod) || JSON.stringify(this.props.pod) != JSON.stringify(nextProps.pod)) {
       this.setState({pod: nextProps.pod});
     }
-    if (JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
-      //console.log('receiveprops: load pack', nextProps);
+    if (_.isEmpty(this.state.player) || JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
       this.setState({player: nextProps.player});
     }
-    if (JSON.stringify(this.props.pack) != JSON.stringify(nextProps.pack)) {
-      //console.log('receiveprops: load pack', nextProps);
+    if (_.isEmpty(this.state.pack) || JSON.stringify(this.props.pack) != JSON.stringify(nextProps.pack)) {
       this.setState({pack: nextProps.pack});
     }
-    if (JSON.stringify(this.props.allPackCards) != JSON.stringify(nextProps.allPackCards)) {
-      //console.log('receiveprops: load pack cards', this.props.packCards, nextProps.packCards);
+    if (_.isEmpty(this.state.allPackCards) || JSON.stringify(this.props.allPackCards) != JSON.stringify(nextProps.allPackCards)) {
       this.setState({allPackCards: nextProps.allPackCards});
     }
-    if (JSON.stringify(this.props.packCards) != JSON.stringify(nextProps.packCards)) {
-      //console.log('receiveprops: load pack cards', this.props.packCards, nextProps.packCards);
+    if (_.isEmpty(this.state.packCards) || JSON.stringify(this.props.packCards) != JSON.stringify(nextProps.packCards)) {
       this.setState({packCards: nextProps.packCards});
     }
-    if (JSON.stringify(this.props.deckCards) != JSON.stringify(nextProps.deckCards)) {
-      //console.log('receiveprops: load deck cards', this.props.deckCards, nextProps.deckCards);
+    if (_.isEmpty(this.state.deckCards) || JSON.stringify(this.props.deckCards) != JSON.stringify(nextProps.deckCards)) {
       this.setState({deckCards: nextProps.deckCards});
     }
   }
 
   nextPackCheck() {
-    this.props.actions.loadPackCards(this.state.hash);
+    this.props.actions.loadPackCards(this.state.hash).then((response) => {
+      if (this.state.pod.complete) {
+        browserHistory.push(`/players/${this.state.hash}/deck`);
+      }
+    });
   }
 
   savePick(event) {
     event.preventDefault();
     this.setState({saving: true, showPastPicks: false});
-    this.props.actions.makePick(event.currentTarget.getAttribute('data-value'), this.state.player.id);
+    this.props.actions.makePick(event.currentTarget.getAttribute('data-value'), this.state.player.id).then((response) => {
+      if (this.state.pod.complete) {
+        browserHistory.push(`/players/${this.state.hash}/deck`);
+      }
+    });
   }
 
   togglePastPicks() {
@@ -142,30 +144,8 @@ PackPage.propTypes = {
 function collectPackCards(packCards, deckCards, pack, showPastPicks) {
   let firstPackPick = deckCards.filter(deckCard => deckCard.pack_id == pack.id).sort((card1, card2) => card1.pick_number - card2.pick_number)[0];
   let firstPackPickNumber = firstPackPick ? firstPackPick.pick_number : 99;
-  let deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
-  let deckCardsColorCount = {white: 0, blue: 0, black: 0, red: 0, green: 0}
-  deckCards.forEach(function(card) {
-    if (card) {
-      deckCardsColorCount['white'] += (card.mana_cost.match(/W/g) || []).length;
-      deckCardsColorCount['blue'] += (card.mana_cost.match(/U/g) || []).length;
-      deckCardsColorCount['black'] += (card.mana_cost.match(/B/g) || []).length;
-      deckCardsColorCount['red'] += (card.mana_cost.match(/R/g) || []).length;
-      deckCardsColorCount['green'] += (card.mana_cost.match(/G/g) || []).length;
-    }
-  });
   let selected = packCards.map(packCard => {
     if (packCard.pack_id == pack.id && ((showPastPicks && packCard.pick_number >= firstPackPickNumber) || !packCard.deck_id)) {
-      let colorRatings = [];
-      packCard.colors.forEach(function(color) {
-        let colorDeckCards = deckCardsColorCount[color.toLowerCase()];
-        colorRatings.push((colorDeckCards / (deckCards.length + 10)) * 40)
-      });
-      let colorRating = colorRatings.length > 0 ? _.meanBy(colorRatings) : 5;
-      packCard['color_rating'] = colorRating;
-      let castRating = 10 / (packCard.colors.length + (packCard.mana_cost.match(/\{.+\}/g) || []).length + packCard.cmc + 1);
-      packCard['cast_rating'] = castRating;
-      let curveRating = ((deckCards.length + 1) / ((deckCardsGroupedCmc[packCard.cmc] || 0).length + 1)) / (Math.pow(packCard.cmc - 2, 2) + 1);
-      packCard['curve_rating'] = curveRating;
       return packCard;
     }
   });

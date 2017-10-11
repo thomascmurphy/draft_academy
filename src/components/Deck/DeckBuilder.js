@@ -7,7 +7,7 @@ import $ from 'jquery';
 class DeckBuilder extends React.Component {
 
   componentDidUpdate(pie_data) {
-    var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard == 0);
+    var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
     var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
     var curveData = []
     _.forOwn(deckCardsGroupedCmc, function(cmcCards, cmc) {
@@ -47,9 +47,9 @@ class DeckBuilder extends React.Component {
   }
 
   render() {
-    var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard == 0);
+    var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
     var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
-    var sideboardCards = this.props.deckCards.filter(deckCard => deckCard.sideboard != 0);
+    var sideboardCards = this.props.deckCards.filter(deckCard => deckCard.sideboard !== 0);
     var cmcColumnCount = 12 / (Object.keys(deckCardsGroupedCmc).length || 1);
     cmcColumnCount = cmcColumnCount < 2 ? `1-5 col-xs-1` : Math.floor(cmcColumnCount);
 

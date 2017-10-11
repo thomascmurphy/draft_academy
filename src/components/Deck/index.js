@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Favicon from 'react-favicon';
+import _ from 'lodash';
 import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import DeckBuilder from './DeckBuilder';
@@ -30,20 +31,16 @@ class DeckPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.hash != nextProps.hash) {
-      //console.log('receiveprops: player', nextProps);
+    if (_.isEmpty(this.state.hash) || this.props.hash != nextProps.hash) {
       this.setState({hash: nextProps.hash});
     }
-    if (JSON.stringify(this.props.pod) != JSON.stringify(nextProps.pod)) {
-      //console.log('receiveprops: load pack', nextProps);
+    if (_.isEmpty(this.state.pod) || JSON.stringify(this.props.pod) != JSON.stringify(nextProps.pod)) {
       this.setState({pod: nextProps.pod});
     }
-    if (JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
-      //console.log('receiveprops: load pack', nextProps);
+    if (_.isEmpty(this.state.player) || JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
       this.setState({player: nextProps.player});
     }
-    if (JSON.stringify(this.props.deckCards) != JSON.stringify(nextProps.deckCards)) {
-      //console.log('receiveprops: load deck cards', this.props.deckCards, nextProps.deckCards);
+    if (_.isEmpty(this.state.deckCards) || JSON.stringify(this.props.deckCards) != JSON.stringify(nextProps.deckCards)) {
       this.setState({deckCards: nextProps.deckCards});
     }
   }
@@ -51,7 +48,7 @@ class DeckPage extends React.Component {
   toggleSideboard(event) {
     event.preventDefault();
     let updateDeckCard = this.state.deckCards.filter(deckCard => deckCard.id == event.currentTarget.getAttribute('data-value'))[0];
-    updateDeckCard.sideboard = updateDeckCard.sideboard == 0 ? 1 : 0;
+    updateDeckCard.sideboard = updateDeckCard.sideboard === 0 ? 1 : 0;
     this.props.actions.updateDeckCard(updateDeckCard);
   }
 
