@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Favicon from 'react-favicon';
+import _ from 'lodash';
 import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import PackCardList from './PackCardList';
@@ -141,8 +142,30 @@ PackPage.propTypes = {
 function collectPackCards(packCards, deckCards, pack, showPastPicks) {
   let firstPackPick = deckCards.filter(deckCard => deckCard.pack_id == pack.id).sort((card1, card2) => card1.pick_number - card2.pick_number)[0];
   let firstPackPickNumber = firstPackPick ? firstPackPick.pick_number : 99;
+  let deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
+  let deckCardsColorCount = {white: 0, blue: 0, black: 0, red: 0, green: 0}
+  deckCards.forEach(function(card) {
+    if (card) {
+      deckCardsColorCount['white'] += (card.mana_cost.match(/W/g) || []).length;
+      deckCardsColorCount['blue'] += (card.mana_cost.match(/U/g) || []).length;
+      deckCardsColorCount['black'] += (card.mana_cost.match(/B/g) || []).length;
+      deckCardsColorCount['red'] += (card.mana_cost.match(/R/g) || []).length;
+      deckCardsColorCount['green'] += (card.mana_cost.match(/G/g) || []).length;
+    }
+  });
   let selected = packCards.map(packCard => {
     if (packCard.pack_id == pack.id && ((showPastPicks && packCard.pick_number >= firstPackPickNumber) || !packCard.deck_id)) {
+      let colorRatings = [];
+      packCard.colors.forEach(function(color) {
+        let colorDeckCards = deckCardsColorCount[color.toLowerCase()];
+        colorRatings.push((colorDeckCards / (deckCards.length + 10)) * 40)
+      });
+      let colorRating = colorRatings.length > 0 ? _.meanBy(colorRatings) : 5;
+      packCard['color_rating'] = colorRating;
+      let castRating = 10 / (packCard.colors.length + (packCard.mana_cost.match(/\{.+\}/g) || []).length + packCard.cmc + 1);
+      packCard['cast_rating'] = castRating;
+      let curveRating = ((deckCards.length + 1) / ((deckCardsGroupedCmc[packCard.cmc] || 0).length + 1)) / (Math.pow(packCard.cmc - 2, 2) + 1);
+      packCard['curve_rating'] = curveRating;
       return packCard;
     }
   });

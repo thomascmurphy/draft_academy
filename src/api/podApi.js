@@ -50,6 +50,18 @@ class PodApi {
     });
   }
 
+  static deletePod(pod, playerId) {
+    const request = new Request(`${process.env.REACT_APP_API_HOST}/api/v1/pods/${pod.id}?player_id=${playerId}`, {
+      method: 'DELETE'
+    });
+
+    return fetch(request).then(response => {
+      return response.json();
+    }).catch(error => {
+      return error;
+    });
+  }
+
   static getAllSets() {
     return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/sets`).then(response => {
       return response.json();

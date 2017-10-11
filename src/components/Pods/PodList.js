@@ -12,6 +12,7 @@ const PodList = ({pods}) => {
               <td className="text-right">
                 <Link to={!pod.complete ? `/players/${pod.player_hash}/pack` : `/pods/${pod.id}/recap`} className={!pod.complete ? "btn btn-xs btn-success" : "btn btn-xs btn-primary"}>{!pod.complete ? "Continue" : "Recap"}</Link>
                 <Link to={`/players/${pod.player_hash}/deck`} className={"btn btn-xs btn-info margin_left" + (pod.complete ? "" : " hidden")}>Your Deck</Link>
+                <button className={!pod.is_owner ? "hidden" : "btn btn-xs btn-danger margin_left"} data-podid={pod.id} data-playerid={pod.player_id}>Delete</button>
               </td>
             </tr>
           )}
@@ -21,7 +22,8 @@ const PodList = ({pods}) => {
 };
 
 PodList.propTypes = {
-  pods: PropTypes.array.isRequired
+  pods: PropTypes.array.isRequired,
+  deletePod: PropTypes.func.isRequired
 };
 
 export default PodList;

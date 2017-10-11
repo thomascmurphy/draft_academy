@@ -14,6 +14,10 @@ export function loadPodsSuccess(pods) {
   return {type: types.LOAD_PODS_SUCCESS, pods};
 }
 
+export function deletePodSuccess(pods) {
+  return {type: types.DELETE_POD_SUCCESS, pods};
+}
+
 export function loadSetsSuccess(sets) {
   return {type: types.LOAD_SETS_SUCCESS, sets};
 }
@@ -57,6 +61,17 @@ export function updatePod(pod) {
   return function (dispatch) {
     return podApi.updatePod(pod).then(response => {
       dispatch(updatePodSuccess(response.pod));
+      return response;
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
+export function deletePod(pod, playerId) {
+  return function (dispatch) {
+    return podApi.deletePod(pod, playerId).then(response => {
+      dispatch(deletePodSuccess(pod));
       return response;
     }).catch(error => {
       throw(error);

@@ -15,6 +15,10 @@ export default function podReducer(state = initialState.pods, action) {
         ...state.filter(pod => pod.id !== action.pod.id),
         Object.assign({}, action.pod)
       ];
+    case types.DELETE_POD_SUCCESS:
+      return [
+        ...state.filter(pod => pod.id !== action.pod.id)
+      ];
     default:
       return state;
   }

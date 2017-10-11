@@ -38,11 +38,7 @@ class HomePage extends React.Component {
 
   filterPlayers(event) {
     event.preventDefault();
-    this.setState({saving: true});
-    this.props.actions.loadPlayers(this.state.email).then((response) => {
-      this.setState({saving: false});
-      browserHistory.push('/pods');
-    });
+    browserHistory.push(`/pods?email=${this.state.email}`);
   }
 
   createPod(event) {
