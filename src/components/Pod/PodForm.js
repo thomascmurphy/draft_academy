@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextInput from '../common/TextInput';
 import Select from '../common/Select';
+import CheckBox from '../common/CheckBox';
 
 class PodForm extends React.Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class PodForm extends React.Component {
     return this.props.pod.players.map((player, index) => {
       return (
         <div className="row" key={index}>
-          <div className="col-xs-6">
+          <div className="col-xs-5">
             <TextInput
               name="email"
               label={index == 0 ? "Your Email" : "Player " + (index + 1) + " Email"}
@@ -21,10 +22,18 @@ class PodForm extends React.Component {
               customValue={index.toString()}
             />
           </div>
-          <div className="col-xs-6">
+          <div className="col-xs-5">
             <TextInput
               name="name"
               label={index == 0 ? "Your Name" : "Player " + (index + 1) + " Name"}
+              onChange={this.props.onPlayerChange}
+              customValue={index.toString()}
+            />
+          </div>
+          <div className="col-xs-2">
+            <CheckBox
+              name="is_bot"
+              label="Bot"
               onChange={this.props.onPlayerChange}
               customValue={index.toString()}
             />

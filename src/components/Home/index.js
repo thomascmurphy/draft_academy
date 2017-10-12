@@ -63,7 +63,8 @@ class HomePage extends React.Component {
     const playerIndex = event.currentTarget.getAttribute('data-custom');
     const field = event.target.name;
     const pod = this.state.pod;
-    pod.players[playerIndex][field] = event.target.value;
+    const value = event.target.type == "checkbox" ? event.target.checked : event.target.value
+    pod.players[playerIndex][field] = value;
     return this.setState({pod: pod});
   }
 
