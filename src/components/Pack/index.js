@@ -104,7 +104,7 @@ class PackPage extends React.Component {
     if (this.props.pack.number > 0) {
       pack_title = "Pack " + this.state.pack.number;
       pick_title = <small>(Pick {((this.state.deckCards.length % 15) + 1)})</small>;
-      pack_card_list = <PackCardList packCards={this.state.packCards} onClick={this.savePick} />;
+      pack_card_list = <PackCardList packCards={this.state.packCards} onClick={this.savePick} showRatings={this.props.location.query['ratings'] == 'true'}/>;
       deck_number = <small>({this.state.deckCards.length} Cards)</small>;
     }
     return (
