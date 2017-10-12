@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import TextInput from '../common/TextInput';
 
 class EmailForm extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

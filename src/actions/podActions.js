@@ -14,8 +14,8 @@ export function loadPodsSuccess(pods) {
   return {type: types.LOAD_PODS_SUCCESS, pods};
 }
 
-export function deletePodSuccess(pods) {
-  return {type: types.DELETE_POD_SUCCESS, pods};
+export function deletePodSuccess(pod) {
+  return {type: types.DELETE_POD_SUCCESS, pod};
 }
 
 export function loadSetsSuccess(sets) {
@@ -70,7 +70,7 @@ export function updatePod(pod) {
 
 export function deletePod(pod, playerId) {
   return function (dispatch) {
-    return podApi.deletePod(pod, playerId).then(response => {
+    return podApi.deletePod(pod, playerId).then(response => {console.log(pod, playerId, )
       dispatch(deletePodSuccess(pod));
       return response;
     }).catch(error => {

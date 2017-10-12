@@ -21,7 +21,8 @@ class PodsPage extends React.Component {
 
   deletePod(event) {
     event.preventDefault();
-    this.props.actions.deletePod(event.currentTarget.getAttribute('data-podid'), event.currentTarget.getAttribute('data-playerid'));
+    let pod = this.props.pods.filter(pod => pod.id == event.currentTarget.getAttribute('data-podid'))[0];
+    this.props.actions.deletePod(pod, event.currentTarget.getAttribute('data-playerid'));
   }
 
   render() {
