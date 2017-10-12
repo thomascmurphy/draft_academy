@@ -2,49 +2,51 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, IndexLink } from 'react-router';
 import _ from 'lodash';
-import $ from 'jquery';
+import ColorChart from './ColorChart';
+import CurveChart from './CurveChart';
+import TypesChart from './TypesChart';
 
 class DeckBuilder extends React.Component {
 
-  componentDidUpdate(pie_data) {
-    var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
-    var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
-    var curveData = []
-    _.forOwn(deckCardsGroupedCmc, function(cmcCards, cmc) {
-      curveData.push({name: `${cmc} CMC`, value:cmcCards.length})
-    });
-    var curveOptions = {
-      colors: ['#eeeeee', '#cccccc', '#aaaaaa', '#999999', '#666666', '#333333', '#000000'],
-      title: 'Mana Curve',
-      bar_spacing: '5',
-      aspect_ratio: 1.5,
-      hover: true,
-      rounded_tops: true
-    }
-
-    var deckCardsColorCount = {white: 0, blue: 0, black: 0, red: 0, green: 0}
-    deckCards.forEach(function(card) {
-      deckCardsColorCount['white'] += (card.mana_cost.match(/W/g) || []).length;
-      deckCardsColorCount['blue'] += (card.mana_cost.match(/U/g) || []).length;
-      deckCardsColorCount['black'] += (card.mana_cost.match(/B/g) || []).length;
-      deckCardsColorCount['red'] += (card.mana_cost.match(/R/g) || []).length;
-      deckCardsColorCount['green'] += (card.mana_cost.match(/G/g) || []).length;
-    });
-    var pieData = []
-    _.forOwn(deckCardsColorCount, function(count, color) {
-      pieData.push({name: color, value: count})
-    });
-    const colorConversion = {colorless: "#cccccc", white: "#f1f1f1", blue: "#3da2ff", black: "#000000", red: "#fa3737", green: "#158300"}
-    var pieColors = pieData.map(colorInfo => colorConversion[colorInfo.name] || '#ffdd53')
-    var pieOptions = {
-        colors: pieColors,
-        has_key: false,
-        title: 'Color Profile'
-    };
-
-    window.drawBar('#curve_bar', curveData, curveOptions);
-    window.drawPie('#color_pie', pieData, pieOptions);
-  }
+  // componentDidUpdate(pie_data) {
+  //   var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
+  //   var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
+  //   var curveData = []
+  //   _.forOwn(deckCardsGroupedCmc, function(cmcCards, cmc) {
+  //     curveData.push({name: `${cmc} CMC`, value:cmcCards.length})
+  //   });
+  //   var curveOptions = {
+  //     colors: ['#eeeeee', '#cccccc', '#aaaaaa', '#999999', '#666666', '#333333', '#000000'],
+  //     title: 'Mana Curve',
+  //     bar_spacing: '5',
+  //     aspect_ratio: 1.5,
+  //     hover: true,
+  //     rounded_tops: true
+  //   }
+  //
+  //   var deckCardsColorCount = {white: 0, blue: 0, black: 0, red: 0, green: 0}
+  //   deckCards.forEach(function(card) {
+  //     deckCardsColorCount['white'] += (card.mana_cost.match(/W/g) || []).length;
+  //     deckCardsColorCount['blue'] += (card.mana_cost.match(/U/g) || []).length;
+  //     deckCardsColorCount['black'] += (card.mana_cost.match(/B/g) || []).length;
+  //     deckCardsColorCount['red'] += (card.mana_cost.match(/R/g) || []).length;
+  //     deckCardsColorCount['green'] += (card.mana_cost.match(/G/g) || []).length;
+  //   });
+  //   var pieData = []
+  //   _.forOwn(deckCardsColorCount, function(count, color) {
+  //     pieData.push({name: color, value: count})
+  //   });
+  //   const colorConversion = {colorless: "#cccccc", white: "#f1f1f1", blue: "#3da2ff", black: "#000000", red: "#fa3737", green: "#158300"}
+  //   var pieColors = pieData.map(colorInfo => colorConversion[colorInfo.name] || '#ffdd53')
+  //   var pieOptions = {
+  //       colors: pieColors,
+  //       has_key: false,
+  //       title: 'Color Profile'
+  //   };
+  //
+  //   window.drawBar('#curve_bar', curveData, curveOptions);
+  //   window.drawPie('#color_pie', pieData, pieOptions);
+  // }
 
   render() {
     var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
@@ -56,7 +58,7 @@ class DeckBuilder extends React.Component {
     return ([
         <div className="row" key="deckbuilder_deck">
           <div className="col-sm-8">
-            <div className="well" style={{minHeight: '400px'}}>
+            <div className="well" style={{minHeight: '400px', paddingBottom: '150px'}}>
               <h3 className="no_margin_top">Your Deck <small>({deckCards.length} Cards)</small></h3>
               <div className="row">
                 {Object.keys(deckCardsGroupedCmc).map((cmc,index) =>
@@ -82,10 +84,13 @@ class DeckBuilder extends React.Component {
         </div>,
         <div className="row" key="deckbuilder_stats">
           <div className="col-sm-4 col-xs-6">
-            <div id="color_pie"></div>
+            <ColorChart deckCards={this.props.deckCards} excludeSideboard={true}/>
           </div>
           <div className="col-sm-4 col-xs-6">
-            <div id="curve_bar"></div>
+            <CurveChart deckCards={this.props.deckCards} excludeSideboard={true}/>
+          </div>
+          <div className="col-sm-4 col-xs-6">
+            <TypesChart deckCards={this.props.deckCards} excludeSideboard={true}/>
           </div>
         </div>
     ]);

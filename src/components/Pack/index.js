@@ -8,6 +8,9 @@ import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import PackCardList from './PackCardList';
 import DeckCardList from './DeckCardList';
+import ColorChart from '../Deck/ColorChart';
+import CurveChart from '../Deck/CurveChart';
+import TypesChart from '../Deck/TypesChart';
 import {browserHistory} from 'react-router';
 
 class PackPage extends React.Component {
@@ -124,6 +127,17 @@ class PackPage extends React.Component {
         <div className="col-md-5">
           <h1>Your Deck {deck_number}</h1>
           <DeckCardList deckCards={this.state.deckCards} />
+          <div className="row" style={{marginTop: '20px'}}>
+            <div className="col-sm-4">
+              <ColorChart deckCards={this.props.deckCards} excludeSideboard={false}/>
+            </div>
+            <div className="col-sm-4">
+              <CurveChart deckCards={this.props.deckCards} excludeSideboard={false}/>
+            </div>
+            <div className="col-sm-4">
+              <TypesChart deckCards={this.props.deckCards} excludeSideboard={false}/>
+            </div>
+          </div>
         </div>
       </div>
     );
