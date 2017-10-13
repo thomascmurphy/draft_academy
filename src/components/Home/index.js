@@ -21,7 +21,14 @@ class HomePage extends React.Component {
         pack_1_set: 'XLN',
         pack_2_set: 'XLN',
         pack_3_set: 'XLN',
-        players: [{email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}, {email: ''}]
+        players: [{email: '', is_bot: false},
+                  {email: '', is_bot: false},
+                  {email: '', is_bot: false},
+                  {email: '', is_bot: false},
+                  {email: '', is_bot: false},
+                  {email: '', is_bot: false},
+                  {email: '', is_bot: false},
+                  {email: '', is_bot: false}]
       }
     };
     this.updateEmailState = this.updateEmailState.bind(this);
@@ -47,7 +54,7 @@ class HomePage extends React.Component {
     this.props.actions.createPod(this.state.pod).then((response) => {
       this.props.actions.loadPlayers(response.owner_email).then((player_response) => {
         this.setState({saving: false});
-        browserHistory.push('/pods');
+        browserHistory.push(`/pods?email=${response.owner_email}`);
       });
     });
   }
