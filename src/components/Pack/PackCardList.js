@@ -4,7 +4,7 @@ import { Link, IndexLink } from 'react-router';
 
 class PackCardList extends React.Component {
   render() {
-    var linkDisplay = {display: 'block', cursor: 'pointer'};console.log(this.props);
+    var linkDisplay = {display: 'block', cursor: 'pointer'};
     return (
         <div className="row">
           {this.props.packCards.map(packCard =>
