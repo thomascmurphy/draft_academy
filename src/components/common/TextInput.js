@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TextInput = ({name, label, onChange, placeholder, value, customValue}) => {
+const TextInput = ({name, label, onChange, placeholder, value, customValue, maxLength=100, helpText=null}) => {
+  let helpBlock = helpText ? <p className="help-block">{helpText}</p> : '';
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
@@ -13,8 +14,10 @@ const TextInput = ({name, label, onChange, placeholder, value, customValue}) => 
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          data-custom={customValue}/>
+          data-custom={customValue}
+          maxLength={maxLength}/>
       </div>
+      {helpBlock}
     </div>
   );
 };

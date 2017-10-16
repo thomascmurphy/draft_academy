@@ -14,8 +14,9 @@ class PodsPage extends React.Component {
 
   componentDidMount() {
     let email = this.props.location.query['email'];
+    let pin = this.props.location.query['pin'];
     if (email) {
-      this.props.actions.loadPlayers(email);
+      this.props.actions.loadPlayers(email, pin);
     }
   }
 

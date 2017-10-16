@@ -1,7 +1,7 @@
 class PlayerApi {
-  static getPlayers(email) {
+  static getPlayers(email, pin) {
     if (!email) { email = '';}
-    return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/players?email=` + email).then(response => {
+    return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/players?email=${email}&pin=${pin}`).then(response => {
       return response.json();
     }).catch(error => {
       return error;

@@ -33,9 +33,9 @@ export function filterDecksSuccess(decks) {
   return {type: types.LOAD_DECKS_SUCCESS, decks};
 }
 
-export function loadPlayers(email) {
+export function loadPlayers(email, pin) {
   return function(dispatch) {
-    return playerApi.getPlayers(email).then(response => {
+    return playerApi.getPlayers(email, pin).then(response => {
       dispatch(loadPlayersSuccess(response.players));
       dispatch(filterPodsSuccess(response.pods));
     }).catch(error => {

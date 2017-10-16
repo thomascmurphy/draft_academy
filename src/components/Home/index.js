@@ -15,6 +15,7 @@ class HomePage extends React.Component {
     super(props, context);
     this.state = {
       email: '',
+      pin: '',
       saving: false,
       pod: {
         name: '',
@@ -40,12 +41,14 @@ class HomePage extends React.Component {
 
   updateEmailState(event) {
     const field = event.target.name;
-    return this.setState({email: event.target.value});
+    let update = {}
+    update[field] = event.target.value;    
+    return this.setState(update);
   }
 
   filterPlayers(event) {
     event.preventDefault();
-    browserHistory.push(`/pods?email=${this.state.email}`);
+    browserHistory.push(`/pods?email=${this.state.email}&pin=${this.state.pin}`);
   }
 
   createPod(event) {
