@@ -33,19 +33,20 @@ class TypesChart extends React.Component {
         rounded: true,
         title: 'Cards'
     };
-    window.drawDonut('#types_donut', donutData, donutOptions);
+    window.drawDonut(`#types_donut${this.props.id}`, donutData, donutOptions);
   }
 
   render() {
     return (
-      <div id="types_donut"></div>
+      <div id={`types_donut${this.props.id}`}></div>
     );
   }
 }
 
 TypesChart.propTypes = {
   deckCards: PropTypes.array.isRequired,
-  excludeSideboard: PropTypes.bool
+  excludeSideboard: PropTypes.bool,
+  id: PropTypes.number
 };
 
 export default TypesChart;

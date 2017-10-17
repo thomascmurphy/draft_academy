@@ -190,6 +190,7 @@
 */
 }
 
+/*
 .img_zoom.mini img:hover {
   transform:scale(4);
   -ms-transform:scale(4);
@@ -197,6 +198,7 @@
   -webkit-transform:scale(4);
   -o-transform:scale(4);
 }
+*/
 
 .img_zoom.large img:hover {
   transform:scale(1.5);

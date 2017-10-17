@@ -12,6 +12,7 @@ const PodList = ({pods, deletePod}) => {
               <td className="text-right">
                 <Link to={!pod.complete ? `/players/${pod.player_hash}/pack` : `/pods/${pod.id}/recap`} className={!pod.complete ? "btn btn-xs btn-success" : "btn btn-xs btn-primary"}>{!pod.complete ? "Continue" : "Recap"}</Link>
                 <Link to={`/players/${pod.player_hash}/deck`} className={"btn btn-xs btn-info margin_left" + (pod.complete ? "" : " hidden")}>Your Deck</Link>
+                <Link to={`/pods/${pod.id}/decks`} className={"btn btn-xs btn-warning margin_left" + (pod.complete ? "" : " hidden")}>All Decks</Link>
                 <button onClick={deletePod} className={!pod.is_owner ? "hidden" : "btn btn-xs btn-danger margin_left"} data-podid={pod.id} data-playerid={pod.player_id}>Delete</button>
               </td>
             </tr>

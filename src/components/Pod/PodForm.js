@@ -82,7 +82,7 @@ class PodForm extends React.Component {
         <input
           type="submit"
           disabled={this.props.saving}
-          className="btn btn-primary"
+          className={this.props.saving ? "btn btn-primary loading" : "btn btn-primary"}
           onClick={this.props.onSave}/>
       </form>
   );

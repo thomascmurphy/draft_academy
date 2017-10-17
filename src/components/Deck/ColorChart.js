@@ -30,19 +30,20 @@ class ColorChart extends React.Component {
         title: 'Color Profile'
     };
 
-    window.drawPie('#color_pie', pieData, pieOptions);
+    window.drawPie(`#color_pie${this.props.id}`, pieData, pieOptions);
   }
 
   render() {
     return (
-      <div id="color_pie"></div>
+      <div id={`color_pie${this.props.id}`}></div>
     );
   }
 }
 
 ColorChart.propTypes = {
   deckCards: PropTypes.array.isRequired,
-  excludeSideboard: PropTypes.bool
+  excludeSideboard: PropTypes.bool,
+  id: PropTypes.number
 };
 
 export default ColorChart;

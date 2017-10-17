@@ -49,22 +49,23 @@ class DeckBuilder extends React.Component {
   // }
 
   render() {
+    var deck_id = _.get(this.props.deckCards, '[0].deck_id');
     var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
     var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
     var sideboardCards = this.props.deckCards.filter(deckCard => deckCard.sideboard !== 0);
-    var cmcColumnCount = 12 / (Object.keys(deckCardsGroupedCmc).length || 1);
+    var cmcColumnCount = Math.max(12 / (Object.keys(deckCardsGroupedCmc).length || 1), 4);
     cmcColumnCount = cmcColumnCount < 2 ? `1-5 col-xs-1` : Math.floor(cmcColumnCount);
 
     return ([
         <div className="row" key="deckbuilder_deck">
           <div className="col-sm-8">
             <div className="well" style={{minHeight: '400px', paddingBottom: '150px'}}>
-              <h3 className="no_margin_top">Your Deck <small>({deckCards.length} Cards)</small></h3>
+              <h3 className="no_margin_top">Deck <small>({deckCards.length} Cards)</small></h3>
               <div className="row">
                 {Object.keys(deckCardsGroupedCmc).map((cmc,index) =>
                   <div className={`col-xs-${cmcColumnCount}`} key={`cmc${cmc}`}>
                     {deckCardsGroupedCmc[cmc].map(deckCard =>
-                      <div className="deck_card img_zoom stacked large" key={'deck_card:' + deckCard.id} onClick={this.props.onClick} data-value={deckCard.id}>
+                      <div className="deck_card img_zoom stacked large" key={'deck_card:' + deckCard.id} onClick={this.props.disableEdit ? null : this.props.onClick} data-value={deckCard.id}>
                         <img className="img-responsive" src={deckCard.image_url} alt={deckCard.id}/>
                       </div>
                     )}
@@ -74,9 +75,9 @@ class DeckBuilder extends React.Component {
             </div>
           </div>
           <div className="col-sm-4">
-            <h3>Your Sideboard</h3>
+            <h3>Sideboard</h3>
             {sideboardCards.map(sideboardCard =>
-              <div className="deck_card img_zoom mini" key={'sideboard_card:' + sideboardCard.id} onClick={this.props.onClick} data-value={sideboardCard.id}>
+              <div className="deck_card img_zoom mini" key={'sideboard_card:' + sideboardCard.id} onClick={this.props.disableEdit ? null : this.props.onClick} data-value={sideboardCard.id}>
                 <img className="img-responsive" src={sideboardCard.image_url} alt={sideboardCard.id}/>
               </div>
             )}
@@ -84,13 +85,13 @@ class DeckBuilder extends React.Component {
         </div>,
         <div className="row" key="deckbuilder_stats">
           <div className="col-sm-4 col-xs-6">
-            <ColorChart deckCards={this.props.deckCards} excludeSideboard={true}/>
+            <ColorChart deckCards={this.props.deckCards} excludeSideboard={true} id={deck_id}/>
           </div>
           <div className="col-sm-4 col-xs-6">
-            <CurveChart deckCards={this.props.deckCards} excludeSideboard={true}/>
+            <CurveChart deckCards={this.props.deckCards} excludeSideboard={true} id={deck_id}/>
           </div>
           <div className="col-sm-4 col-xs-6">
-            <TypesChart deckCards={this.props.deckCards} excludeSideboard={true}/>
+            <TypesChart deckCards={this.props.deckCards} excludeSideboard={true} id={deck_id}/>
           </div>
         </div>
     ]);
@@ -99,7 +100,8 @@ class DeckBuilder extends React.Component {
 
 DeckBuilder.propTypes = {
   deckCards: PropTypes.array.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func,
+  disableEdit: PropTypes.bool
 };
 
 export default DeckBuilder;

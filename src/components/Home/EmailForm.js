@@ -19,6 +19,7 @@ class EmailForm extends React.Component {
             <TextInput
               name="pin"
               label="PIN"
+              placeholder="(4 Characters Max)"
               value={this.props.pin}
               onChange={this.props.onChange}
               maxLength={4}
@@ -28,7 +29,7 @@ class EmailForm extends React.Component {
         <input
           type="submit"
           disabled={this.props.saving}
-          className="btn btn-primary"
+          className={this.props.saving ? "btn btn-primary loading" : "btn btn-primary"}
           onClick={this.props.onSave}/>
       </form>
   );
