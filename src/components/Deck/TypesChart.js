@@ -33,12 +33,12 @@ class TypesChart extends React.Component {
         rounded: true,
         title: 'Cards'
     };
-    window.drawDonut(`#types_donut${this.props.id}`, donutData, donutOptions);
+    window.drawDonut(`#types_donut${this.props.id || ''}`, donutData, donutOptions);
   }
 
   render() {
     return (
-      <div id={`types_donut${this.props.id}`}></div>
+      <div id={`types_donut${this.props.id || ''}`}></div>
     );
   }
 }

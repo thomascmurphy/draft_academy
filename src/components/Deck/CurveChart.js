@@ -23,13 +23,13 @@ class CurveChart extends React.Component {
       rounded_tops: true
     }
 
-    window.drawBar(`#curve_bar${this.props.id}`, curveData, curveOptions);
+    window.drawBar(`#curve_bar${this.props.id || ''}`, curveData, curveOptions);
   }
 
   render() {
 
     return (
-      <div id={`curve_bar${this.props.id}`}></div>
+      <div id={`curve_bar${this.props.id || ''}`}></div>
     );
   }
 }

@@ -30,12 +30,12 @@ class ColorChart extends React.Component {
         title: 'Color Profile'
     };
 
-    window.drawPie(`#color_pie${this.props.id}`, pieData, pieOptions);
+    window.drawPie(`#color_pie${this.props.id || ''}`, pieData, pieOptions);
   }
 
   render() {
     return (
-      <div id={`color_pie${this.props.id}`}></div>
+      <div id={`color_pie${this.props.id || ''}`}></div>
     );
   }
 }
