@@ -12,10 +12,20 @@ class CurveChart extends React.Component {
     var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
     var curveData = []
     _.forOwn(deckCardsGroupedCmc, function(cmcCards, cmc) {
-      curveData.push({name: `${cmc} CMC`, value:cmcCards.length})
+      let curveTypesCount = {Creature: 0, Other: 0, Land: 0}
+      cmcCards.forEach(function(card) {
+        if (card.types.includes('Creature')) {
+          curveTypesCount['Creature'] += 1;
+        } else if (card.types.includes('Land')) {
+          curveTypesCount['Land'] += 1;
+        } else {
+          curveTypesCount['Other'] += 1;
+        }
+      });
+      curveData.push({name: [`${cmc} CMC (Land)`, `${cmc} CMC (Creatures)`, `${cmc} CMC (Other)`], value:[curveTypesCount['Land'], curveTypesCount['Creature'], curveTypesCount['Other']]})
     });
     var curveOptions = {
-      colors: ['#eeeeee', '#cccccc', '#aaaaaa', '#999999', '#666666', '#333333', '#000000'],
+      colors: ["#a7c23c", "#df8246", "#6bb8b6"],
       title: 'Mana Curve',
       bar_spacing: '5',
       aspect_ratio: 1.5,
