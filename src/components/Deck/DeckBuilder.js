@@ -53,7 +53,7 @@ class DeckBuilder extends React.Component {
     var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
     var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
     var sideboardCards = this.props.deckCards.filter(deckCard => deckCard.sideboard !== 0);
-    var cmcColumnCount = Math.max(12 / (Object.keys(deckCardsGroupedCmc).length || 1), 4);
+    var cmcColumnCount = Math.min(12 / (Object.keys(deckCardsGroupedCmc).length || 1), 3);
     cmcColumnCount = cmcColumnCount < 2 ? `1-5 col-xs-1` : Math.floor(cmcColumnCount);
 
     return ([
