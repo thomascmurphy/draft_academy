@@ -976,10 +976,22 @@ if(!full_donut){
     var start_x = width - area_width + bar_spacing/2;
     var start_y = area_height;
     var bar_width = (area_width - ((data.length) * bar_spacing)) / data.length;
+    var data_total_values = [];
+
     for(var i=0; i<data.length; i++){
-      data_total += data[i].value;
-      if(data[i].value + height_adjustment > data_max){
-        data_max = data[i].value + height_adjustment;
+      var data_value = 0;
+      if(typeof(data[i].value) == "number") {
+        data[i].value = [data[i].value]
+      }
+      if(typeof(data[i].name) == "string") {
+        data[i].name = Array(data[i].value.length).fill([data[i].name]);
+      }
+      for(var j=0; j<data[i].value.length; j++){
+        data_value += data[i].value[j];
+      }
+      data_total += data_value;
+      if(data_value + height_adjustment > data_max){
+        data_max = data_value + height_adjustment;
       }
     }
 
@@ -991,6 +1003,18 @@ if(!full_donut){
       } else {
         color_switch = goal_value;
         indicated_height = max_bar_height * (goal_value + height_adjustment) / data_max;
+      }
+
+      for(var i=0; i<data.length; i++){
+        var data_value = 0;
+        for(var j=0; j<data[i].value.length; j++){
+          data_value += data[i].value[j];
+        }
+        if(data_value > color_switch){
+          data[i].value[0] = data_value - color_switch;
+          data[i].value.unshift(color_switch);
+          data[i].name.unshift(data[i].name[0]);
+        }
       }
 
       var value_indicator = makeSVG('rect',
@@ -1040,191 +1064,102 @@ if(!full_donut){
       svg.append(color_switch_text);
     }
 
-
-    if(typeof color_switch !== 'undefined'){
-
-      for(var i=0; i<data.length; i++){
-        var data_item = data[i],
-        lower_bar_height = max_bar_height * Math.min((data_item.value + height_adjustment), (color_switch + height_adjustment)) / data_max,
-        bar_height = max_bar_height * (data_item.value + height_adjustment) / data_max,
-        lower_color = colors[0],
-        upper_color = colors[colors.length - 1],
+    for(var i=0; i<data.length; i++){
+      var data_item = data[i],
+      start_y_section = start_y,
+      bar_height = 0,
+      bar_value = 0;
+      for(var j=0; j<data_item.value.length; j++){
+        var section_value = data_item.value[j],
+        section_height = max_bar_height * (section_value + height_adjustment) / data_max,
+        color = data_item.value.length==1 ? colors[i%colors.length] : colors[j%colors.length],
         bar_class = hover ? "graph_piece" : "";
 
-        if(bar_height > lower_bar_height){
-          var upper_start_y = start_y - lower_bar_height,
-          upper_bar_height = bar_height - lower_bar_height;
-          var upper_piece_attrs = [
-            'M',
-            start_x,
-            upper_start_y,
-            'L',
-            start_x,
-            upper_start_y - upper_bar_height + Math.min(bar_width/2, upper_bar_height),
-            'A',
-            bar_width/2,
-            Math.min(bar_width/2, upper_bar_height),
-            '0 0 1',
-            start_x + bar_width,
-            upper_start_y - upper_bar_height + Math.min(bar_width/2, upper_bar_height),
-            'L',
-            start_x + bar_width,
-            upper_start_y,
-            'Z'
-          ];
-          var upper_piece_path = makeSVG('path',
-                                         {
-                                           d: upper_piece_attrs.join(' '),
-                                           fill: upper_color,
-                                           "data-title": data_item.name,
-                                           "data-value": data_item.value,
-                                           class: bar_class
-                                         });
-          svg.append(upper_piece_path);
-        }
-
-        var lower_piece_attrs = [
-          'M',
-          start_x,
-          start_y,
-          'L',
-          start_x,
-          start_y - lower_bar_height,
-          'L',
-          start_x + bar_width,
-          start_y - lower_bar_height,
-          'L',
-          start_x + bar_width,
-          start_y,
-          'Z'
-        ];
-        var lower_piece_path = makeSVG('path',
-                                       {
-                                         d: lower_piece_attrs.join(' '),
-                                         fill: lower_color,
-                                         "data-title": data_item.name,
-                                         "data-value": data_item.value,
-                                         class: bar_class
-                                       });
-        svg.append(lower_piece_path);
-
-
-        if(!hover){
-          var value_text = makeSVG('text',
-                                   {
-                                     x: start_x + bar_width/2,
-                                     y: start_y - bar_height - 1,
-                                     fill: secondary_text_color,
-                                     'text-anchor': 'middle',
-                                     class: "key_text"
-                                   },
-                                   prettyNumber(data_item.value));
-
-          var title_text = makeSVG('text',
-                                   {
-                                     x: start_x + bar_width/2,
-                                     y: height - 1,
-                                     fill: secondary_text_color,
-                                     'text-anchor': 'middle',
-                                     class: "key_text"
-                                   },
-                                   data_item.name);
-
-          svg.append(value_text);
-          svg.append(title_text);
-        }
-
-        start_x += (bar_width + bar_spacing);
-
-      }
-
-    } else {
-
-      for(var i=0; i<data.length; i++){
-        var data_item = data[i],
-        bar_height = max_bar_height * (data_item.value + height_adjustment) / data_max,
-        color = colors[i%colors.length],
-        bar_class = hover ? "graph_piece" : "";
-
-        if(rounded_tops){
+        if(rounded_tops && j==(data_item.value.length-1) && (typeof color_switch == 'undefined' || section_height > color_switch)){
           var piece_attrs = [
               'M',
               start_x,
-              start_y,
+              start_y_section,
               'L',
               start_x,
-              start_y - bar_height + Math.min(bar_width/2, bar_height),
+              start_y_section - section_height + Math.min(bar_width/2, section_height),
               'A',
               bar_width/2,
-              Math.min(bar_width/2, bar_height),
+              Math.min(bar_width/2, section_height),
               '0 0 1',
               start_x + bar_width,
-              start_y - bar_height + Math.min(bar_width/2, bar_height),
+              start_y_section - section_height + Math.min(bar_width/2, section_height),
               'L',
               start_x + bar_width,
-              start_y,
+              start_y_section,
               'Z'
           ];
         } else {
           var piece_attrs = [
               'M',
               start_x,
-              start_y,
+              start_y_section,
               'L',
               start_x,
-              start_y - bar_height,
+              start_y_section - section_height,
               'L',
               start_x + bar_width,
-              start_y - bar_height,
+              start_y_section - section_height,
               'L',
               start_x + bar_width,
-              start_y,
+              start_y_section,
               'Z'
           ];
         }
-
+        var display_value = section_value;
+        if (typeof(color_switch) !== "undefined" && data_item.value.length == 2){
+          display_value = data_item.value[0] + data_item.value[1];
+        }
         var piece_path = makeSVG('path',
                                  {
                                    d: piece_attrs.join(' '),
                                    fill: color,
-                                   "data-title": data_item.name,
-                                   "data-value": data_item.value,
+                                   "data-title": data_item.name[j],
+                                   "data-value": display_value,
                                    class: bar_class
                                  });
 
-        if(bar_height > 0){
+        if(section_height > 0){
           svg.append(piece_path);
         }
 
-
-        if(!hover){
-          var value_text = makeSVG('text',
-                                   {
-                                     x: start_x + bar_width/2,
-                                     y: start_y - bar_height - 1,
-                                     fill: secondary_text_color,
-                                     'text-anchor': 'middle',
-                                     class: "key_text"
-                                   },
-                                   prettyNumber(data_item.value));
-
-          var title_text = makeSVG('text',
-                                   {
-                                     x: start_x + bar_width/2,
-                                     y: height - 1,
-                                     fill: secondary_text_color,
-                                     'text-anchor': 'middle',
-                                     class: "key_text"
-                                   }, data_item.name);
-
-          svg.append(value_text);
-          svg.append(title_text);
-        }
-
-        start_x += (bar_width + bar_spacing);
+        start_y_section -= section_height;
+        bar_height += section_height;
+        bar_value += section_value;
       }
 
-    } /* end non-colorchange */
+      if(!hover){
+        var value_text = makeSVG('text',
+                                 {
+                                   x: start_x + bar_width/2,
+                                   y: start_y - bar_height - 1,
+                                   fill: secondary_text_color,
+                                   'text-anchor': 'middle',
+                                   class: "key_text"
+                                 },
+                                 prettyNumber(bar_value));
+
+        var title_text = makeSVG('text',
+                                 {
+                                   x: start_x + bar_width/2,
+                                   y: height - 1,
+                                   fill: secondary_text_color,
+                                   'text-anchor': 'middle',
+                                   class: "key_text"
+                                 }, data_item.name[0]);
+
+        svg.append(value_text);
+        svg.append(title_text);
+      }
+
+      start_x += (bar_width + bar_spacing);
+    }
+
 
     if(hover && title){
       var graph_title = makeSVG('text',
