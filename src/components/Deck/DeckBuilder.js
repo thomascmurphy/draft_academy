@@ -50,7 +50,8 @@ class DeckBuilder extends React.Component {
 
   copyDeckList(event) {
     event.preventDefault();
-    var deckList = document.querySelector('#decklist');
+    let deckId = event.currentTarget.getAttribute('data-deckid');
+    var deckList = document.querySelector(`#decklist_${deckId}`);
     deckList.focus();
     deckList.select();
     var msg = "";
@@ -60,7 +61,7 @@ class DeckBuilder extends React.Component {
     } catch (err) {
       msg = 'Unable to copy.'
     }
-    window.toolTipFlash('#copy_decklist_btn', msg);
+    window.toolTipFlash(`#copy_decklist_btn_${deckId}`, msg);
   }
 
   render() {
@@ -85,11 +86,11 @@ class DeckBuilder extends React.Component {
                   <h3 className="no_margin_top">Deck <small>({deckCards.length} Cards)</small></h3>
                 </div>
                 <div className="col-xs-4 text-right">
-                  <button type="button" id="copy_decklist_btn" className="btn btn-primary" onClick={this.copyDeckList} data-toggle="tooltip" data-placement="top" title="">
+                  <button type="button" id={`copy_decklist_btn_${deck_id}`} className="btn btn-primary" onClick={this.copyDeckList} data-toggle="tooltip" data-placement="top" title="" data-deckid={deck_id}>
                     Copy Decklist
                   </button>
                   <div style={{width: '1px', height: '1px', overflow: 'hidden', position: 'absolute'}}>
-                    <textarea id="decklist" value={exportItems.join('\n')}></textarea>
+                    <textarea id={`decklist_${deck_id}`} value={exportItems.join('\n')} readOnly={true}></textarea>
                   </div>
                 </div>
               </div>
