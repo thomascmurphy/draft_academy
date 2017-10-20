@@ -22,10 +22,10 @@ class CurveChart extends React.Component {
           curveTypesCount['Other'] += 1;
         }
       });
-      curveData.push({name: [`${cmc} CMC (Land)`, `${cmc} CMC (Creatures)`, `${cmc} CMC (Other)`], value:[curveTypesCount['Land'], curveTypesCount['Creature'], curveTypesCount['Other']]})
+      curveData.push({name: [`${cmc} CMC (Creatures)`, `${cmc} CMC (Other)`], value:[curveTypesCount['Creature'], curveTypesCount['Other']]})
     });
     var curveOptions = {
-      colors: ["#a7c23c", "#df8246", "#6bb8b6"],
+      colors: ["#df8246", "#6bb8b6"],
       title: 'Mana Curve',
       bar_spacing: '5',
       aspect_ratio: 1.5,
