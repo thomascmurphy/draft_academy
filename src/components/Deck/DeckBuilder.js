@@ -48,19 +48,51 @@ class DeckBuilder extends React.Component {
   //   window.drawPie('#color_pie', pieData, pieOptions);
   // }
 
+  copyDeckList(event) {
+    event.preventDefault();
+    var deckList = document.querySelector('#decklist');
+    deckList.focus();
+    deckList.select();
+    var msg = "";
+    try {
+      var successful = document.execCommand('copy');
+      msg = successful ? 'Copied to clipboard.' : 'Something went wrong.';
+    } catch (err) {
+      msg = 'Unable to copy.'
+    }
+    window.toolTipFlash('#copy_decklist_btn', msg);
+  }
+
   render() {
     var deck_id = _.get(this.props.deckCards, '[0].deck_id');
     var deckCards = this.props.deckCards.filter(deckCard => deckCard.sideboard === 0);
-    var deckCardsGroupedCmc = _.groupBy(deckCards, 'cmc');
+    var deckCardsGroupedCmc = _.groupBy(_.sortBy(deckCards, 'name'), 'cmc');
     var sideboardCards = this.props.deckCards.filter(deckCard => deckCard.sideboard !== 0);
     var cmcColumnCount = Math.min(12 / (Object.keys(deckCardsGroupedCmc).length || 1), 3);
     cmcColumnCount = cmcColumnCount < 2 ? `1-5 col-xs-1` : Math.floor(cmcColumnCount);
+    var exportItems = [];
+    var deckCardsGroupedName = _.groupBy(deckCards, 'name');
+    _.forOwn(deckCardsGroupedName, function(nameCards, name) {
+      exportItems.push(`${nameCards.length}x ${name}`);
+    });
 
     return ([
         <div className="row" key="deckbuilder_deck">
           <div className="col-sm-8">
             <div className="well" style={{minHeight: '400px', paddingBottom: '150px'}}>
-              <h3 className="no_margin_top">Deck <small>({deckCards.length} Cards)</small></h3>
+              <div className="row">
+                <div className="col-xs-8">
+                  <h3 className="no_margin_top">Deck <small>({deckCards.length} Cards)</small></h3>
+                </div>
+                <div className="col-xs-4 text-right">
+                  <button type="button" id="copy_decklist_btn" className="btn btn-primary" onClick={this.copyDeckList} data-toggle="tooltip" data-placement="top" title="">
+                    Copy Decklist
+                  </button>
+                  <div style={{width: '1px', height: '1px', overflow: 'hidden', position: 'absolute'}}>
+                    <textarea id="decklist" value={exportItems.join('\n')}></textarea>
+                  </div>
+                </div>
+              </div>
               <div className="row">
                 {Object.keys(deckCardsGroupedCmc).map((cmc,index) =>
                   <div className={`col-xs-${cmcColumnCount}`} key={`cmc${cmc}`}>
