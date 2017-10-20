@@ -92,6 +92,16 @@ export function updateDeckCard(deckCard) {
   };
 }
 
+export function addLands(deckId, playerId, lands) {
+  return function(dispatch) {
+    return playerApi.addLands(deckId, playerId, lands).then(response => {
+      dispatch(loadDeckCardsSuccess(response.deck_cards));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
 export function preloadImages(hash) {
   return function(dispatch) {
     return playerApi.getCardImages(hash).then(response => {

@@ -62,6 +62,24 @@ class PlayerApi {
     });
   }
 
+  static addLands(deckId, playerId, lands) {
+    const request = new Request(`${process.env.REACT_APP_API_HOST}/api/v1/players/add_lands`, {
+      method: 'post',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({deck_id: deckId, player_id: playerId, lands: lands}),
+      mode: 'cors'
+    });
+
+    return fetch(request).then(response => {
+      return response.json();
+    }).catch(error => {
+      return error;
+    });
+  }
+
   static getCardImages(hash) {
     if (!hash) { hash = '';}
     return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/players/` + hash + '/card_images').then(response => {
