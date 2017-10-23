@@ -17,7 +17,8 @@ class PackPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      pod: {players:[]},
+      pod: {},
+      pod_players: [],
       player: {},
       pack: {},
       allPackCards: [],
@@ -52,6 +53,9 @@ class PackPage extends React.Component {
     }
     if (_.isEmpty(this.state.pod) || JSON.stringify(this.props.pod) != JSON.stringify(nextProps.pod)) {
       this.setState({pod: nextProps.pod});
+    }
+    if (_.isEmpty(this.state.pod_players) || (JSON.stringify(this.props.pod_players) != JSON.stringify(nextProps.pod_players) && nextProps.pod_players && nextProps.pod_players.length > 0)) {
+      this.setState({pod_players: nextProps.pod_players});
     }
     if (_.isEmpty(this.state.player) || JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
       this.setState({player: nextProps.player});
@@ -165,18 +169,20 @@ class PackPage extends React.Component {
                         <span id="triangle_7" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
                         <span id="triangle_8" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
                       </div>
-                      {this.state.pod.players.map((player, index) =>
+                      {this.state.pod_players.map((player, index) =>
                         <div id={`player_${index + 1}`} className="player" key={`table_player_${index}`}>
                           <span className={player.is_bot ? "glyphicon glyphicon-hdd" : "glyphicon glyphicon-user"}/><br/>
                           {player.name}
+                          {player.pack_ids && player.pack_ids.length > 0 ? (
+                            <div className="pack_count">
+                              {player.pack_ids.length} x <span className="glyphicon glyphicon-inbox"/>
+                            </div>
+                          ) : ''}
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
@@ -210,8 +216,9 @@ function collectPackCards(packCards, deckCards, pack, showPastPicks) {
 }
 
 function mapStateToProps(state, ownProps) {
-  let pod = {players:[]}
-  let player = {}
+  let pod = {};
+  let pod_players = [];
+  let player = {};
   let pack = {set_code: '', number: 0, complete: false};
   let packCards = [];
   let deckCards = state.deckCards.length > 0 ? state.deckCards : [];
@@ -220,6 +227,7 @@ function mapStateToProps(state, ownProps) {
     player = state.players.filter(player => player.hash == hash)[0];
     if (state.pods.length > 0) {
       pod = state.pods.filter(pod => pod.id == player.pod_id)[0];
+      pod_players = pod.players ? pod.players : [];
     }
   }
   if (state.decks.length > 0 && player.id) {
@@ -231,7 +239,7 @@ function mapStateToProps(state, ownProps) {
     pack = Object.assign({}, state.packs.find(pack => pack ? pack.id == packId : false));
     packCards = collectPackCards(state.packCards, deckCards, pack, state.showPastPicks, false);
   }
-  return {pod: pod, player: player, pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
+  return {pod: pod, pod_players: pod_players, player: player, pack: pack, allPackCards: state.packCards, packCards: packCards, deckCards: deckCards, hash: hash};
 }
 
 function mapDispatchToProps(dispatch) {
