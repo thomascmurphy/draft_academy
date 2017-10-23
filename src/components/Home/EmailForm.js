@@ -20,7 +20,6 @@ class EmailForm extends React.Component {
               name="pin"
               label="PIN"
               placeholder="(4 Characters Max)"
-              value={this.props.pin}
               onChange={this.props.onChange}
               maxLength={4}
               helpText="Will set a PIN for future logins if none exists"/>
@@ -40,8 +39,7 @@ EmailForm.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   saving: PropTypes.bool,
-  email: PropTypes.string,
-  pin: PropTypes.string
+  email: PropTypes.string
 };
 
 export default EmailForm;
