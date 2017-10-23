@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TextInput = ({name, label, onChange, placeholder, value, customValue, maxLength=100, helpText=null}) => {
-  let helpBlock = helpText ? <p className="help-block">{helpText}</p> : '';
+const TextInput = (props) => {
+  let helpBlock = props.helpText ? <p className="help-block">{props.helpText}</p> : '';
   return (
     <div className="form-group">
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={props.name}>{props.label}</label>
       <div className="field">
         <input
           type="text"
-          name={name}
+          name={props.name}
           className="form-control"
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          data-custom={customValue}
-          maxLength={maxLength}/>
+          placeholder={props.placeholder}
+          value={props.value}
+          onChange={props.onChange}
+          data-custom={props.customValue}
+          maxLength={props.maxLength || 100}
+          disabled={props.disabled}/>
       </div>
       {helpBlock}
     </div>

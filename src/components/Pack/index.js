@@ -17,7 +17,7 @@ class PackPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      pod: {},
+      pod: {players:[]},
       player: {},
       pack: {},
       allPackCards: [],
@@ -101,6 +101,7 @@ class PackPage extends React.Component {
     var pack_title = 'Your Pack';
     var pick_title = '';
     var deck_number = '';
+    var pack_number = this.state.pack.number;
     var pack_card_list = <p>Waiting for your next pack to be passed</p>;
     var past_picks_button = this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks';
     var favicon = this.state.packCards.length > 0 ? <Favicon url="/favicon_alert.ico" /> : <Favicon url="/favicon.ico" />;
@@ -114,11 +115,14 @@ class PackPage extends React.Component {
       <div className="row">
         <div className="col-md-7">
           <div className="row">
-            <div className="col-md-8">
+            <div className="col-md-6">
               {favicon}
               <h1>{pack_title} {pick_title}</h1>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-6 text-right">
+              <button type="button" className="btn btn-warning margin_right" style={{marginTop: '20px'}} data-toggle="modal" data-target="#tableModal">
+                View Table
+              </button>
               <button onClick={this.togglePastPicks} disabled={!(this.props.pack.number > 0)} className={this.state.showPastPicks ? 'btn btn-default' : 'btn btn-primary'} style={{marginTop: '20px'}}><span className={this.state.showPastPicks ? 'glyphicon glyphicon-eye-close' : 'glyphicon glyphicon-eye-open'}></span> {this.state.showPastPicks ? 'Hide Past Picks' : 'Show Past Picks'}</button>
             </div>
           </div>
@@ -139,6 +143,45 @@ class PackPage extends React.Component {
             </div>
           </div>
         </div>
+
+        <div className="modal fade" id="tableModal" tabIndex="-1" role="dialog" aria-labelledby="tableModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 className="modal-title" id="tableModalLabel">Table Order</h4>
+              </div>
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col-xs-12">
+                    <div id="table_order">
+                      <div id="table_triangles">
+                        <span id="triangle_1" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                        <span id="triangle_2" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                        <span id="triangle_3" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                        <span id="triangle_4" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                        <span id="triangle_5" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                        <span id="triangle_6" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                        <span id="triangle_7" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                        <span id="triangle_8" className={pack_number == 2 ? "glyphicon glyphicon-triangle-right reverse" : "glyphicon glyphicon-triangle-right"}/>
+                      </div>
+                      {this.state.pod.players.map((player, index) =>
+                        <div id={`player_${index + 1}`} className="player" key={`table_player_${index}`}>
+                          <span className={player.is_bot ? "glyphicon glyphicon-hdd" : "glyphicon glyphicon-user"}/><br/>
+                          {player.name}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     );
   }
@@ -167,7 +210,7 @@ function collectPackCards(packCards, deckCards, pack, showPastPicks) {
 }
 
 function mapStateToProps(state, ownProps) {
-  let pod = {}
+  let pod = {players:[]}
   let player = {}
   let pack = {set_code: '', number: 0, complete: false};
   let packCards = [];

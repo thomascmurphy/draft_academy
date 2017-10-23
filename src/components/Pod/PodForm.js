@@ -17,6 +17,7 @@ class PodForm extends React.Component {
           <div className="col-xs-5">
             <TextInput
               name="email"
+              value={player.email || ''}
               label={index == 0 ? "Your Email" : "Player " + (index + 1) + " Email"}
               onChange={this.props.onPlayerChange}
               customValue={index.toString()}
@@ -25,6 +26,7 @@ class PodForm extends React.Component {
           <div className="col-xs-5">
             <TextInput
               name="name"
+              value={player.name || ''}
               label={index == 0 ? "Your Name" : "Player " + (index + 1) + " Name"}
               onChange={this.props.onPlayerChange}
               customValue={index.toString()}

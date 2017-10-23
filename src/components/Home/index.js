@@ -42,7 +42,7 @@ class HomePage extends React.Component {
   updateEmailState(event) {
     const field = event.target.name;
     let update = {}
-    update[field] = event.target.value;    
+    update[field] = event.target.value;
     return this.setState(update);
   }
 
@@ -75,6 +75,9 @@ class HomePage extends React.Component {
     const pod = this.state.pod;
     const value = event.target.type == "checkbox" ? event.target.checked : event.target.value
     pod.players[playerIndex][field] = value;
+    if (pod.players[playerIndex]['is_bot'] == true) {
+      pod.players[playerIndex]['name'] = 'Bot Player ' + (parseInt(playerIndex) + 1);
+    }
     return this.setState({pod: pod});
   }
 

@@ -1,0 +1,185 @@
+#table_order {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  margin: auto;
+  border: 10px solid #efefef;
+  border-radius: 50%;
+}
+
+  #table_triangles span{
+    position: absolute;
+    font-size: 50px;
+    color: #efefef;
+  }
+
+    #triangle_1 {
+      left: 66%;
+      top: -1.5%;
+      -ms-transform: rotate(24deg); /* IE 9 */
+      -webkit-transform: rotate(24deg); /* Chrome, Safari, Opera */
+      transform: rotate(24deg);
+    }
+
+      #triangle_1.reflect {
+        -ms-transform: rotate(204deg); /* IE 9 */
+        -webkit-transform: rotate(204deg); /* Chrome, Safari, Opera */
+        transform: rotate(204deg);
+      }
+
+    #triangle_2 {
+      left: 92%;
+      top: 26%;
+      -ms-transform: rotate(58deg); /* IE 9 */
+      -webkit-transform: rotate(58deg); /* Chrome, Safari, Opera */
+      transform: rotate(58deg);
+    }
+
+      #triangle_2.reflect {
+        -ms-transform: rotate(238deg); /* IE 9 */
+        -webkit-transform: rotate(238deg); /* Chrome, Safari, Opera */
+        transform: rotate(238deg);
+      }
+
+    #triangle_3 {
+      left: 91%;
+      top: 66%;
+      -ms-transform: rotate(112deg); /* IE 9 */
+      -webkit-transform: rotate(112deg); /* Chrome, Safari, Opera */
+      transform: rotate(112deg);
+    }
+
+      #triangle_3.reflect {
+        -ms-transform: rotate(292deg); /* IE 9 */
+        -webkit-transform: rotate(292deg); /* Chrome, Safari, Opera */
+        transform: rotate(292deg);
+      }
+
+    #triangle_4 {
+      left: 63%;
+      top: 92%;
+      -ms-transform: rotate(157deg); /* IE 9 */
+      -webkit-transform: rotate(157deg); /* Chrome, Safari, Opera */
+      transform: rotate(157deg);
+    }
+
+      #triangle_4.reflect {
+        -ms-transform: rotate(337deg); /* IE 9 */
+        -webkit-transform: rotate(337deg); /* Chrome, Safari, Opera */
+        transform: rotate(337deg);
+      }
+
+    #triangle_5 {
+      left: 24%;
+      top: 91%;
+      -ms-transform: rotate(204deg); /* IE 9 */
+      -webkit-transform: rotate(204deg); /* Chrome, Safari, Opera */
+      transform: rotate(204deg);
+    }
+
+      #triangle_5.reflect {
+        -ms-transform: rotate(24deg); /* IE 9 */
+        -webkit-transform: rotate(24deg); /* Chrome, Safari, Opera */
+        transform: rotate(24deg);
+      }
+
+    #triangle_6 {
+      left: -1.5%;
+      top: 65%;
+      -ms-transform: rotate(244deg); /* IE 9 */
+      -webkit-transform: rotate(244deg); /* Chrome, Safari, Opera */
+      transform: rotate(244deg);
+    }
+
+      #triangle_6.reflect {
+        -ms-transform: rotate(64deg); /* IE 9 */
+        -webkit-transform: rotate(64deg); /* Chrome, Safari, Opera */
+        transform: rotate(64deg);
+      }
+
+    #triangle_7 {
+      left: -2%;
+      top: 25%;
+      -ms-transform: rotate(293deg); /* IE 9 */
+      -webkit-transform: rotate(293deg); /* Chrome, Safari, Opera */
+      transform: rotate(293deg);
+    }
+
+      #triangle_7.reflect {
+        -ms-transform: rotate(113deg); /* IE 9 */
+        -webkit-transform: rotate(113deg); /* Chrome, Safari, Opera */
+        transform: rotate(113deg);
+      }
+
+    #triangle_8 {
+      left: 26%;
+      top: -2%;
+      -ms-transform: rotate(336deg); /* IE 9 */
+      -webkit-transform: rotate(336deg); /* Chrome, Safari, Opera */
+      transform: rotate(336deg);
+    }
+
+      #triangle_8.reflect {
+        -ms-transform: rotate(156deg); /* IE 9 */
+        -webkit-transform: rotate(156deg); /* Chrome, Safari, Opera */
+        transform: rotate(156deg);
+      }
+
+  #table_order .player {
+    width: 80px;
+    height: 80px;
+    background-color: #efefef;
+    border: 5px solid #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    margin-left: -40px;
+    margin-top: -40px;
+    text-align: center;
+    overflow: visible;
+    color: #333333;
+  }
+
+    #table_order .player .glyphicon {
+      margin-top: 10px;
+      font-size: 35px;
+    }
+
+  #table_order #player_1 {
+    left: 50%;
+    top: 0%;
+  }
+
+  #table_order #player_2 {
+    left: 85%;
+    top: 15%;
+  }
+
+  #table_order #player_3 {
+    left: 100%;
+    top: 50%;
+  }
+
+  #table_order #player_4 {
+    left: 85%;
+    top: 85%;
+  }
+
+  #table_order #player_5 {
+    left: 50%;
+    top: 100%;
+  }
+
+  #table_order #player_6 {
+    left: 15%;
+    top: 85%;
+  }
+
+  #table_order #player_7 {
+    left: 0%;
+    top: 50%;
+  }
+
+  #table_order #player_8 {
+    left: 15%;
+    top: 15%;
+  }
