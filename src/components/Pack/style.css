@@ -2,7 +2,7 @@
   position: relative;
   width: 500px;
   height: 500px;
-  margin: auto;
+  margin: 20px auto 40px auto;
   border: 10px solid #efefef;
   border-radius: 50%;
 }
@@ -139,10 +139,14 @@
     color: #333333;
   }
 
-    #table_order .player .glyphicon {
+    #table_order .player > .glyphicon {
       margin-top: 10px;
       font-size: 35px;
     }
+
+      #table_order .player .pack_count {
+        width: 100%;
+      }
 
   #table_order #player_1 {
     left: 50%;
