@@ -24,16 +24,16 @@ class PodDeckRecapPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.isEmpty(this.state.pod) || this.props.pod.id != nextProps.pod.id) {
+    if (_.isEmpty(this.state.pod) || this.props.pod.id !== nextProps.pod.id) {
       this.setState({pod: nextProps.pod});
     }
-    if (JSON.stringify(this.props.players) != JSON.stringify(nextProps.players)) {
+    if (JSON.stringify(this.props.players) !== JSON.stringify(nextProps.players)) {
       this.setState({players: nextProps.players});
     }
-    if (JSON.stringify(this.props.decks) != JSON.stringify(nextProps.decks)) {
+    if (JSON.stringify(this.props.decks) !== JSON.stringify(nextProps.decks)) {
       this.setState({decks: nextProps.decks});
     }
-    if (JSON.stringify(this.props.packCards) != JSON.stringify(nextProps.packCards)) {
+    if (JSON.stringify(this.props.packCards) !== JSON.stringify(nextProps.packCards)) {
       this.setState({packCards: nextProps.packCards});
     }
   }
@@ -62,9 +62,7 @@ PodDeckRecapPage.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-const getPods = (state, props) => state.pods;
-const getPodId = (state, props) => props.params.podId;
-const getPod = (state, props) => state.pod || Object.assign({}, state.pods.find(pod => pod.id == props.params.podId));
+const getPod = (state, props) => state.pod || Object.assign({}, state.pods.find(pod => pod.id === props.params.podId));
 const getPlayers = (state, props) => state.players;
 const getDecks = (state, props) => state.decks;
 const getPackCards = (state, props) => state.packCards;
@@ -77,15 +75,15 @@ function collectPodPlayers(state, props) {
   let packCards = getPackCards(state, props);
 
   let selected = players.map(player => {
-    if (player.pod_id == pod.id) {
-      let playerDeck = Object.assign({}, decks.find(deck => deck.player_id == player.id));
-      let playerDeckCards = Object.assign([], packCards.filter(packCard => packCard.deck_id == playerDeck.id));
+    if (player.pod_id === pod.id) {
+      let playerDeck = Object.assign({}, decks.find(deck => deck.player_id === player.id));
+      let playerDeckCards = Object.assign([], packCards.filter(packCard => packCard.deck_id === playerDeck.id));
       player['deck'] = playerDeck;
       player['deck_cards'] = playerDeckCards.sort((card1, card2) => card1.pick_number - card2.pick_number);
-      return player;
     }
+    return player;
   });
-  return selected.filter(el => el != undefined);
+  return selected.filter(el => el !== undefined);
 }
 
 
@@ -93,7 +91,7 @@ function mapStateToProps(state, ownProps) {
   let pod = {name: '', pack_1_set: '', pack_2_set: '', pack_3_set: '', player_ids: []};
   let players = [];
   if (state.pods.length > 0) {
-    pod = Object.assign({}, state.pods.find(pod => pod.id == ownProps.params.podId));
+    pod = Object.assign({}, state.pods.find(pod => pod.id === ownProps.params.podId));
     players = collectPodPlayers(state, ownProps);
   }
   let props = {pod: pod, players: players, decks: state.decks, packCards: state.packCards};

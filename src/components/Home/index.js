@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Link} from 'react-router';
 import './style.css';
 import * as playerActions from '../../actions/playerActions';
 import * as podActions from '../../actions/podActions';
@@ -73,10 +72,10 @@ class HomePage extends React.Component {
     const playerIndex = event.currentTarget.getAttribute('data-custom');
     const field = event.target.name;
     const pod = this.state.pod;
-    const value = event.target.type == "checkbox" ? event.target.checked : event.target.value
+    const value = event.target.type === "checkbox" ? event.target.checked : event.target.value
     pod.players[playerIndex][field] = value;
-    if (pod.players[playerIndex]['is_bot'] == true) {
-      pod.players[playerIndex]['name'] = 'Bot Player ' + (parseInt(playerIndex) + 1);
+    if (pod.players[playerIndex]['is_bot'] === true) {
+      pod.players[playerIndex]['name'] = 'Bot Player ' + (parseInt(playerIndex, 10) + 1);
     }
     return this.setState({pod: pod});
   }

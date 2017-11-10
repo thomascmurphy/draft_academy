@@ -105,9 +105,9 @@ export function addLands(deckId, playerId, lands) {
 export function preloadImages(hash) {
   return function(dispatch) {
     return playerApi.getCardImages(hash).then(response => {
-      let images = response.card_image_urls.map((card_image_url) => {
+      response.card_image_urls.map((card_image_url) => {
         let img=new Image();
-        img.src=card_image_url;
+        return img.src=card_image_url;
       });
     }).catch(error => {
       throw(error);

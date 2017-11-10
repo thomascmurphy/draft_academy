@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './style.css';
 import Header from '../common/Header';
 

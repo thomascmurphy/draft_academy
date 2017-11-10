@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import Favicon from 'react-favicon';
 import _ from 'lodash';
 import './style.css';
 import * as playerActions from '../../actions/playerActions';
@@ -40,26 +39,26 @@ class DeckPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.isEmpty(this.state.hash) || this.props.hash != nextProps.hash) {
+    if (_.isEmpty(this.state.hash) || this.props.hash !== nextProps.hash) {
       this.setState({hash: nextProps.hash});
     }
-    if (_.isEmpty(this.state.pod) || JSON.stringify(this.props.pod) != JSON.stringify(nextProps.pod)) {
+    if (_.isEmpty(this.state.pod) || JSON.stringify(this.props.pod) !== JSON.stringify(nextProps.pod)) {
       this.setState({pod: nextProps.pod});
     }
-    if (_.isEmpty(this.state.player) || JSON.stringify(this.props.player) != JSON.stringify(nextProps.player)) {
+    if (_.isEmpty(this.state.player) || JSON.stringify(this.props.player) !== JSON.stringify(nextProps.player)) {
       this.setState({player: nextProps.player});
     }
-    if (_.isEmpty(this.state.deck) || JSON.stringify(this.props.deck) != JSON.stringify(nextProps.deck)) {
+    if (_.isEmpty(this.state.deck) || JSON.stringify(this.props.deck) !== JSON.stringify(nextProps.deck)) {
       this.setState({deck: nextProps.deck});
     }
-    if (_.isEmpty(this.state.deckCards) || JSON.stringify(this.props.deckCards) != JSON.stringify(nextProps.deckCards)) {
+    if (_.isEmpty(this.state.deckCards) || JSON.stringify(this.props.deckCards) !== JSON.stringify(nextProps.deckCards)) {
       this.setState({deckCards: nextProps.deckCards});
     }
   }
 
   toggleSideboard(event) {
     event.preventDefault();
-    let updateDeckCard = this.state.deckCards.filter(deckCard => deckCard.id == event.currentTarget.getAttribute('data-value'))[0];
+    let updateDeckCard = this.state.deckCards.filter(deckCard => deckCard.id === parseInt(event.currentTarget.getAttribute('data-value'), 10))[0];
     updateDeckCard.sideboard = updateDeckCard.sideboard === 0 ? 1 : 0;
     this.props.actions.updateDeckCard(updateDeckCard);
   }
@@ -67,7 +66,7 @@ class DeckPage extends React.Component {
   changeLands(event) {
     event.preventDefault();
     let update = {}
-    update[event.target.name] = parseInt(event.target.value);
+    update[event.target.name] = parseInt(event.target.value, 10);
     this.setState(update);
   }
 
@@ -80,7 +79,6 @@ class DeckPage extends React.Component {
 
 
   render() {
-    var pod_complete = this.state.pod && this.state.pod.complete;
     return (
       <div className="row">
         <div className="col-md-12">
@@ -150,14 +148,14 @@ function mapStateToProps(state, ownProps) {
   let deckCards = state.deckCards.length > 0 ? state.deckCards : [];
   const hash = ownProps.params.hash;
   if (state.players.length > 0) {
-    player = state.players.filter(player => player.hash == hash)[0];
+    player = state.players.filter(player => player.hash === hash)[0];
     if (state.pods.length > 0) {
-      pod = state.pods.filter(pod => pod.id == player.pod_id)[0];
+      pod = state.pods.filter(pod => pod.id === player.pod_id)[0];
     }
   }
   if (state.decks.length > 0 && player.id) {
-    deck = state.decks.filter(deck => deck.player_id == player.id)[0];
-    deckCards = (deck && deck.id) ? state.deckCards.filter(deckCard => deckCard.deck_id == deck.id) : deckCards;
+    deck = state.decks.filter(deck => deck.player_id === player.id)[0];
+    deckCards = (deck && deck.id) ? state.deckCards.filter(deckCard => deckCard.deck_id === deck.id) : deckCards;
   }
   return {pod: pod, player: player, deck: deck, deckCards: deckCards, hash: hash};
 }

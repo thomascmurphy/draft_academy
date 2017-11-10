@@ -16,7 +16,6 @@ class PodApi {
   }
 
   static createPod(pod) {
-    var player_emails = pod.players.map(player => player.email);
     const request = new Request(`${process.env.REACT_APP_API_HOST}/api/v1/pods`, {
       method: 'POST',
       headers: new Headers({
