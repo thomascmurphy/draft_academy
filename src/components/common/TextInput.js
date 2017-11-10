@@ -16,7 +16,8 @@ const TextInput = (props) => {
           onChange={props.onChange}
           data-custom={props.customValue}
           maxLength={props.maxLength || 100}
-          disabled={props.disabled}/>
+          disabled={props.disabled}
+          autoComplete={props.autoComplete===false ? "off" : "on"}/>
       </div>
       {helpBlock}
     </div>

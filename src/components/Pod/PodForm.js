@@ -53,7 +53,8 @@ class PodForm extends React.Component {
           name="name"
           label="Pod Name"
           value={this.props.pod.name}
-          onChange={this.props.onChange}/>
+          onChange={this.props.onChange}
+          autoComplete={false} />
 
         <Select
           name="pack_1_set"
