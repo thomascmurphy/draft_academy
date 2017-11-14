@@ -62,7 +62,7 @@ PodDeckRecapPage.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-const getPod = (state, props) => state.pod || Object.assign({}, state.pods.find(pod => pod.id === props.params.podId));
+const getPod = (state, props) => state.pod || Object.assign({}, state.pods.find(pod => pod.id === parseInt(props.params.podId)));
 const getPlayers = (state, props) => state.players;
 const getDecks = (state, props) => state.decks;
 const getPackCards = (state, props) => state.packCards;
@@ -91,7 +91,7 @@ function mapStateToProps(state, ownProps) {
   let pod = {name: '', pack_1_set: '', pack_2_set: '', pack_3_set: '', player_ids: []};
   let players = [];
   if (state.pods.length > 0) {
-    pod = Object.assign({}, state.pods.find(pod => pod.id === ownProps.params.podId));
+    pod = Object.assign({}, state.pods.find(pod => pod.id === parseInt(ownProps.params.podId)));
     players = collectPodPlayers(state, ownProps);
   }
   let props = {pod: pod, players: players, decks: state.decks, packCards: state.packCards};

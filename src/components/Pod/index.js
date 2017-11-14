@@ -44,19 +44,20 @@ class PodPage extends React.Component {
       this.setState({packCards: nextProps.packCards});
     }
     if (this.props.pickNumber !== nextProps.pickNumber) {
-      this.setState({pickNumber: nextProps.pickNumber});
+      this.setState({pickNumber: parseInt(nextProps.pickNumber)});
     }
   }
 
   changePickNumber(event) {
-    this.setState({pickNumber: event.target.value});
-    let players = collectPodPlayers(this.state, this.props, event.target.value);
+    let pickNumber = parseInt(event.target.value);
+    this.setState({pickNumber: pickNumber});
+    let players = collectPodPlayers(this.state, this.props, pickNumber);
     this.setState({players: players});
   }
 
   render() {
-    let showRecap = this.state.pod.complete || this.props.location.query.cheat
-    let content = showRecap ? <PodPlayerList players={this.state.players} /> : <div className="well">This pod is still ongoing...</div>
+    let showRecap = this.state.pod.complete || this.props.location.query.cheat;
+    let content = showRecap ? <PodPlayerList players={this.state.players} /> : <div className="well">This pod is still ongoing...</div>;
     return ([
       <div className="row bg-white shadow-bottom sticky_control" key="pod_header" data-spy="affix" data-offset-top="70" style={{padding: "10px 0px", height: "60px"}}>
         <div className="col-sm-6 hidden-xs">
@@ -89,7 +90,7 @@ PodPage.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-const getPod = (state, props) => state.pod || Object.assign({}, state.pods.find(pod => pod.id === props.params.podId));
+const getPod = (state, props) => state.pod || Object.assign({}, state.pods.find(pod => pod.id === parseInt(props.params.podId)));
 const getPlayers = (state, props) => state.players;
 const getPacks = (state, props) => state.packs;
 const getDecks = (state, props) => state.decks;
@@ -102,7 +103,6 @@ function collectPodPlayers(state, props, pickNumber) {
   let packs = getPacks(state, props);
   let decks = getDecks(state, props);
   let packCards = getPackCards(state, props);
-
   let selected = players.map(player => {
     if (player.pod_id === pod.id) {
       let playerDeck = Object.assign({}, decks.find(deck => deck.player_id === player.id));
@@ -155,11 +155,11 @@ function collectPodPlayers(state, props, pickNumber) {
 
 
 function mapStateToProps(state, ownProps) {
-  let pod = {name: '', pack_1_set: '', pack_2_set: '', pack_3_set: '', player_ids: []};
+  let pod = {name: '', pack_1_set: '', pack_2_set: '', pack_3_set: '', player_ids: [], complete: 0};
   let players = [];
   let pickNumber = state.pickNumber || 1;
   if (state.pods.length > 0) {
-    pod = Object.assign({}, state.pods.find(pod => pod.id === ownProps.params.podId));
+    pod = Object.assign({}, state.pods.find(pod => pod.id === parseInt(ownProps.params.podId)));
     players = collectPodPlayers(state, ownProps, pickNumber);
   }
   let props = {pod: pod, players: players, packs: state.packs, decks: state.decks, packCards: state.packCards, pickNumber: pickNumber};
