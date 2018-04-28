@@ -1,10 +1,10 @@
 // server/index.js
 'use strict';
 
-var app = require('./app');
+const app = require('./app');
 
-var PORT = process.env.PORT || 14196;
+const PORT = process.env.PORT || 14196;
 
-app.listen(PORT, function(){
-  console.log('App listening on port '+PORT+'!');
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}!`);
 });
